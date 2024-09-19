@@ -10,7 +10,9 @@ function App() {
       <Routes>
          {/* <Route path="/" element={<Home/>} />
                 <Route path='/search-result/:keyWords' element={<SearchResult/>} */}
-         <Route path="/login" element={<Login />} />
+         <Route path="/home" element={<Home/>} />
+         <Route path='/search-result/:keyWords' element={<SearchResult/>} />
+         <Route path="/" element={<Login />} />
       </Routes>
       
     </div>

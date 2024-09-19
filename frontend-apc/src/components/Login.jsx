@@ -10,30 +10,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-// Define your custom theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#7c4dff', // Violet color
+      main: '#7c4dff',
     },
     secondary: {
-      main: '#ab47bc', // Lighter violet color
+      main: '#7c4dff',
     },
   },
 });
 
 function Login() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log({
-      email,
-      password,
-    });
-  };
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const response = await axios.post('http://localhost:8080/buyer-users/login', {
+          email,
+          password
+        });
+
+        if (response.status === 200) {
+          navigate('/home');
+        }
+      } catch (error) {
+        console.error('Error during login:', error.response?.data || error.message);
+      }
+    };
 
   return (
     <ThemeProvider theme={theme}>
