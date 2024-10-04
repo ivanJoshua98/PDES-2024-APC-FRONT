@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { ImageList, ImageListItem, useMediaQuery } from '@mui/material';
+import {useNavigate} from "react-router-dom";
+import { Card, CardActionArea, ImageList, ImageListItem, useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import ProductController from '../controller/ProductController';
 import { useParams } from 'react-router-dom';
@@ -8,12 +9,17 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
+import LoadingScreenProductSearch from './LoadingScreenProductSearch';
 
 function SearchedProductsList() {
+
+    const navigate = useNavigate();
 
     let {keyWords} = useParams();
 
     const [products, setProducts] = useState([]);
+
+    const [loading, setLoading] = useState(true); 
 
     const matches = useMediaQuery('(min-width:900px)');
 
@@ -23,9 +29,14 @@ function SearchedProductsList() {
     useEffect(() => {
         ProductController.searchProductsByWords(keyWords).then(res => {
             setProducts(res.data);
+            setLoading(false);
         }).catch(error => console.log('error:', error));
     }, [keyWords]);
 
+
+    const handleClick = (item) => {
+      navigate('/search-result/product/'.concat(item.id));
+    };
 
     const Item = styled(Paper)(({ theme }) => ({
       backgroundColor: '#fff',
@@ -69,13 +80,14 @@ function SearchedProductsList() {
             justifyContent: 'center',
             alignItems: 'center'}}>
 
+      {loading ? <LoadingScreenProductSearch/> :
       <ImageList cols={matches ? 3 : (matches2 ? 2 : 1)} >
             {products.map((item) => (
-                <ThemeProvider theme={theme} key={item.id}>
-                  <ImageListItem key={Object.keys(item.pictures)[1]} 
-                                sx={{border: '1px solid #afafaf', 
-                                      margin: 1,
-                                      }}>
+              <Card sx={{margin: 1}}>
+                <CardActionArea sx={{height: '100%', display: 'flex', alignItems: 'end'}}
+                  onClick={() => handleClick(item)}>
+                  <ThemeProvider theme={theme} key={item.id}>
+                    <ImageListItem key={Object.keys(item.pictures)[1]}>
                       <img srcSet={`${item.pictures[0]}`}
                         src={`${item.pictures[0]}`}  
                         alt={item.title}
@@ -86,17 +98,20 @@ function SearchedProductsList() {
                             <Item elevation={0} sx={{fontSize: 'medium', fontWeight: 'bold'}}>{item.title}</Item>
                           </Grid>
                           <Grid size={6}>
-                            <Item elevation={0} sx={{fontSize: 'larger', fontWeight: 'bold'}}>${item.price}</Item>
+                            <Item elevation={0} sx={{fontSize: 'larger', fontWeight: 'bold'}}>${Intl.NumberFormat().format(item.price)}</Item>
                           </Grid>
                           <Grid size={6} sx={{display: 'flex', justifyContent: 'right'}}>
                             <Chip label={item.condition.toUpperCase()} color="success" sx={{marginRight: '10px'}}/>
                           </Grid>
                         </Grid>
                       </Box>
-                  </ImageListItem>
-                </ThemeProvider>
+                    </ImageListItem>
+                  </ThemeProvider>
+                </CardActionArea>
+              </Card>
             ))}
         </ImageList>
+        }
     </Box>
   );
 }
