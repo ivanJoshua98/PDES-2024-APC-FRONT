@@ -1,9 +1,9 @@
-import { notAuthenticatedApiClient } from "./BaseApi";
+import { authenticatedApiClient } from "./BaseApi";
 
 
-const searchProductsByWords = (words) => notAuthenticatedApiClient.get('/products/search/'.concat(words));
+const searchProductsByWords = (words) => authenticatedApiClient().get('/products/search/'.concat(words));
 
-const getProductByIdFromML = (productId) => notAuthenticatedApiClient.get('/products/search/item/'.concat(productId));
+const getProductByIdFromML = (productId) => authenticatedApiClient().get('/products/search/item/'.concat(productId));
 
 
 export default {searchProductsByWords, getProductByIdFromML};
