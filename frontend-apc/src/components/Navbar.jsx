@@ -14,8 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 
-const settings = ['Mi perfil', 'Ajustes', 'Cerrar Sesion'];
-
 function Navbar() {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -38,6 +36,13 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleCloseSesion = () => {
+    handleCloseUserMenu();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    navigate('/sign-in');
+  }
 
   return (
     <AppBar position="static">
@@ -123,7 +128,7 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button key='Inicio'
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/home')}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Inicio </Button>
             <Button key='Favoritos'
                     onClick={handleCloseNavMenu}
@@ -154,11 +159,15 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                <MenuItem key="mi-perfil" onClick={handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Mi perfil</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem key="ajustes" onClick={handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Ajustes</Typography>
+                </MenuItem>
+                <MenuItem key="cerrar-sesion" onClick={handleCloseSesion}>
+                  <Typography sx={{ textAlign: 'center' }}>Cerrar sesión</Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

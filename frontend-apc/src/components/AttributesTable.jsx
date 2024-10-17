@@ -10,7 +10,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AttributeController from '../controller/AttributeController';
-import {IconButton, Tooltip } from '@mui/material';
+import {Box, IconButton, Tooltip } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
@@ -86,7 +86,8 @@ const AttributesTable = (props) => {
                 ))}
             </TableBody>
       </Table>
-      {collapseAttributeButton ? 
+      <Box sx={{display:'flex', justifyContent: 'center'}}>
+        {collapseAttributeButton ? 
         <Tooltip title='Ocultar caracteristicas'>
             <IconButton onClick={collapseAttributes}>
                 <ExpandLessIcon fontSize='medium'/>
@@ -96,8 +97,8 @@ const AttributesTable = (props) => {
             <IconButton onClick={showMoreAttributes}>
                 <ExpandMoreIcon fontSize='medium'/>
             </IconButton>                         
-        </Tooltip>
-      }
+        </Tooltip>  }
+      </Box>
     </TableContainer>
   );
 }
