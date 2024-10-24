@@ -9,7 +9,8 @@ on:
     paths: 
        - 'frontend-apc/**'
   pull_request:
-    branches: [ "main", "develop" ]
+    types:
+       - opened
     paths: 
        - 'frontend-apc/**'
 
