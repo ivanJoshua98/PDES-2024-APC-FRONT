@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 
 const Searcher = () => {
 
@@ -15,6 +16,10 @@ const Searcher = () => {
       if(keyWords){
         navigate('/search-result/'.concat(keyWords.replace(/ /g, "%20")));
       }
+    };
+
+    const handleClick = () => {
+      navigate('/search-result/'.concat(keyWords.replace(/ /g, "%20")));
     };
     
 
@@ -28,7 +33,9 @@ const Searcher = () => {
                         input: {
                           startAdornment: (
                             <InputAdornment position="start">
-                              <SearchIcon />
+                              <IconButton onClick={handleClick}>  
+                                <SearchIcon />
+                              </IconButton>
                             </InputAdornment>
                           ),
                         },
