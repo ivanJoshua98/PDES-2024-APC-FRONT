@@ -12,15 +12,23 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useNavigate } from 'react-router-dom';
+import Searcher from './Searcher';
+import {useNavigate} from "react-router-dom";
+import ShoppingCart from './ShoppingCart';
 
-function Navbar() {
+function Navbar(props) {
+
+  const [cantProductsInCart, setCantProductsInCart] = React.useState(0);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const navigate = useNavigate();
+
+  const {window} = props;
+
+  const path = window !== undefined ? window().location.href : "";
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -53,7 +61,7 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -94,7 +102,7 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              <MenuItem key='Inicio' onClick={() => navigate('/')}>
+              <MenuItem key='Inicio' onClick={() => navigate('/home')}>
                   <Typography sx={{ textAlign: 'center' }}>Inicio</Typography>
               </MenuItem>
               <MenuItem key='Favoritos' onClick={handleCloseNavMenu}>
@@ -105,27 +113,6 @@ function Navbar() {
               </MenuItem>
             </Menu>
           </Box>
-
-          <ShoppingCartIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            APC
-          </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button key='Inicio'
                     onClick={() => navigate('/home')}
@@ -137,7 +124,15 @@ function Navbar() {
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Compras </Button>
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
+
+          <Box sx={{width:'70%', display:'flex', justifyContent:'right', alignItems:'center', marginBottom:'1rem', marginTop:'1rem'}}>
+              {path.includes("/home")? <></> : <Searcher/>}
+          </Box>
+
+          <Box sx={{ flexGrow: 0, display:'flex' }}>
+            
+            <ShoppingCart cantProducts={cantProductsInCart} />
+
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
