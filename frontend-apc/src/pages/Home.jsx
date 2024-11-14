@@ -1,13 +1,11 @@
 import React from 'react'
 import Searcher from '../components/Searcher'
 import { Box } from '@mui/material'
-import Navbar from '../components/Navbar'
 
 const Home = () => {
 
   return (
     <div>
-        <Navbar></Navbar>
         <Box sx={{  height: {
                     xs: "10em",
                     md: "20em"},

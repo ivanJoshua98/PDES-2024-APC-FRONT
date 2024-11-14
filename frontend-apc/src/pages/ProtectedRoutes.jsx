@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom';
 import UserController from '../controller/UserController';
+import Navbar from '../components/Navbar';
 
 const ProtectedRoutes = () => {
 
@@ -11,6 +12,7 @@ const ProtectedRoutes = () => {
 
   return (
     <div>
+      <Navbar window={() => window}/>
       <Outlet />
     </div>
   )

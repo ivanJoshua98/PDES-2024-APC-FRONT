@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
-import LoadingScreenProductSearch from './LoadingScreenProductSearch';
+import LoadingScreenProductSearch from '../components/LoadingScreenProductSearch';
 
 function SearchedProductsList() {
 
@@ -83,7 +83,7 @@ function SearchedProductsList() {
       {loading ? <LoadingScreenProductSearch/> :
       <ImageList cols={matches ? 3 : (matches2 ? 2 : 1)} >
             {products.map((item) => (
-              <Card sx={{margin: 1}}>
+              <Card key={item.id} sx={{margin: 1}}>
                 <CardActionArea sx={{height: '100%', display: 'flex', alignItems: 'end'}}
                   onClick={() => handleClick(item)}>
                   <ThemeProvider theme={theme} key={item.id}>
