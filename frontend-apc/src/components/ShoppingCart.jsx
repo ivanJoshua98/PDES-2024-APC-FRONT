@@ -1,39 +1,30 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button, Typography } from '@mui/material';
-import { Context } from '../App';
 import ProductInCart from './ProductInCart';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EmptyShoppingCart from './EmptyShoppingCart';
 import Modal from '@mui/material/Modal';
-import PurchaseController from '../controller/PurchaseController';
+import ShoppingCartController from '../controller/ShoppingCartController';
+import { Context } from '../App';
 
 
 const ShoppingCart = () => {
 
-    const [cartContent, setCartContent] = useContext(Context);
-
-    const existsIdInList = (list, id) => {
-      let exists = false;
-      list.forEach((element) => {
-        exists = exists || (element.id === id);
+    const [shoppingCart, setShoppingCart] = useContext(Context);
+  
+    useEffect(() => {
+      ShoppingCartController.getShoppingCartInProgress(localStorage.getItem("userId")).then( response => {
+        setShoppingCart(response.data);
+      }).catch( error => {
+        console.log("Error al obtener carrito en progreso: ", error);
       });
-      return exists;
-    }
+    }, [setShoppingCart]);
 
-    const removeRepeatedItems = (list) => {
-      let result = [];
-      list.forEach((element) => {
-          if (!existsIdInList(result, element.id)) {
-              result.push(element);
-          }
-      });
-      return result;
-    }
 
     const [state, setState] = React.useState({
         top: false,
@@ -64,35 +55,51 @@ const style = {
   p: 4,
 };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => setOpen(true);
-
-  const handleClose = () => setOpen(false);
 
   const finishPurchase = () => {
-    let salePrice = 0;
-    cartContent.forEach( (element) => {salePrice = salePrice + element.price });
-    let productsIds = cartContent.map( (element) => element.id);
-    let buyerId = localStorage.getItem('userId');
-
-    PurchaseController.finishPurchase(salePrice, productsIds, buyerId)
-    .then((result) => {
-      console.log('response: ', result);
-      handleClose();
-      setCartContent([]);
-    })
-    .catch(err => {
-      console.log('error:', err);
+    ShoppingCartController.finishPurchase(shoppingCart.id).then( response => {
+      console.log('Carrito de compras finalizado: ', response);
+      handleCloseModalFinishPurchase();
+      setShoppingCart({
+        totalAmountPurchase: 0,
+        productsInCart: [],
+        buyerId: "",
+        id: "",
+        cartState: ""
+      });
+    }).catch( (error) => {
+      console.log('Error al finalizar carrito de compras:', error);
      });
-  }
+  };
 
 
-  const modal = () => (
+  const deleteShoppingCart = () => {
+    ShoppingCartController.deleteShoppingCart(shoppingCart.id).then( response => {
+      console.log('Carrito de compras eliminado: ', response);
+      handleCloseModalDeleteCart();
+      setShoppingCart({
+        totalAmountPurchase: 0,
+        productsInCart: [],
+        buyerId: "",
+        id: "",
+        cartState: ""
+      });
+    }).catch( error => {
+      console.log("Error al eliminar el carrito: ", error);
+    });
+  };
+
+  const [openModalFinishPurchase, setOpenModalFinishPurchase] = React.useState(false);
+
+  const handleOpenModalFinishPurchase = () => setOpenModalFinishPurchase(true);
+
+  const handleCloseModalFinishPurchase = () => setOpenModalFinishPurchase(false);
+
+  const modalFinishPurchase = () => (
     <div>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={openModalFinishPurchase}
+        onClose={handleCloseModalFinishPurchase}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -101,8 +108,37 @@ const style = {
             Finalizaras la operacion y compraras los productos
           </Typography>
           <Box marginTop='1rem'>
-            <Button sx={{marginX:'5px', width:'85px'}}variant='outlined' onClick={handleClose}>Atras</Button>
+            <Button sx={{marginX:'5px', width:'85px'}}variant='outlined' onClick={handleCloseModalFinishPurchase}>Atras</Button>
             <Button sx={{marginX:'5px', width:'85px'}} variant='contained' onClick={finishPurchase}>Comprar</Button>
+          </Box>
+        </Box>
+      </Modal>
+    </div>
+  );
+
+
+  const [openModalDeleteCart, setOpenModalDeleteCart] = React.useState(false);
+
+  const handleOpenModalDeleteCart = () => setOpenModalDeleteCart(true);
+
+  const handleCloseModalDeleteCart = () => setOpenModalDeleteCart(false);
+
+
+  const modalDeleteCart = () => (
+    <div>
+      <Modal
+        open={openModalDeleteCart}
+        onClose={handleCloseModalDeleteCart}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} display='grid' justifyItems='center'>
+          <Typography id="modal-modal-title" variant="h6" component="h2" textAlign='center'>
+            ¿Seguro que quieres vaciar el carrito?
+          </Typography>
+          <Box marginTop='1rem'>
+            <Button sx={{marginX:'5px', width:'85px'}}variant='outlined' onClick={handleCloseModalDeleteCart}>Atras</Button>
+            <Button sx={{marginX:'5px', width:'85px'}} variant='contained' onClick={deleteShoppingCart}>Vaciar</Button>
           </Box>
         </Box>
       </Modal>
@@ -123,27 +159,43 @@ const style = {
             <Typography marginRight='1rem' sx={{color:'white'}}>CARRITO DE COMPRAS</Typography>
           </Box>
           
-          {isEmptyCart()? <EmptyShoppingCart/> : removeRepeatedItems(cartContent).map(
-            (product) => <ProductInCart key={product.id} product={product}/>
+          {isEmptyCart()? <EmptyShoppingCart/> : shoppingCart.productsInCart.map(
+            (product) => <ProductInCart key={product.id} product={product} />
           )}
 
-          {isEmptyCart()? <></> : <Box display='flex' justifyContent='center' marginTop='1rem'>
-            <Button variant='contained' onClick={handleOpen}>Finalizar Compra</Button>
-          </Box>}
+          {isEmptyCart()? <></> :
+            <Box display='grid' justifyContent='right' marginRight='1rem'>
+              <Typography fontWeight='bold'> Total en el carrito: ${Intl.NumberFormat().format(shoppingCart.totalAmountPurchase)}</Typography>
+              <Button variant='text' sx={{justifyContent:'right'}} onClick={handleOpenModalDeleteCart}>Vaciar carrito</Button>
+            </Box>}
+
+          {isEmptyCart()? <></> : 
+            <Box display='flex' justifyContent='center' marginTop='1rem'>
+              <Button variant='contained' onClick={handleOpenModalFinishPurchase}>Finalizar Compra</Button>
+            </Box>}
         </Box>
       );
+
     
       const isEmptyCart = () => {
-        return cartContent.length <= 0;
+        return shoppingCart.productsInCart.length <= 0;
       }
 
+
+      const amountProductsInCart = () => {
+        var result = 0;
+        shoppingCart.productsInCart.forEach(element => {
+          result = result + element.amount;
+        });
+        return result;
+      }
 
 
       return (
         
         <Box>
             <IconButton aria-label="cart" onClick={toggleDrawer("right", true)} sx={{marginRight:'1rem'}}>
-                <Badge badgeContent={cartContent.length} color="error">
+                <Badge badgeContent={amountProductsInCart()} color="error">
                     <AddShoppingCartIcon sx={{color:'white'}}/>
                 </Badge>
             </IconButton>
@@ -154,7 +206,8 @@ const style = {
                 onClose={toggleDrawer("right", false)}
               >
                {list("right")}
-               {modal()}
+               {modalFinishPurchase()}
+               {modalDeleteCart()}
               </Drawer>
             </React.Fragment>
         </Box>

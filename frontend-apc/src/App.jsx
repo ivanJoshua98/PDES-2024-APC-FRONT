@@ -27,11 +27,17 @@ function App() {
     )
   );
 
-  const [cartContent, setCartContent] = useState([]);
+  const [shoppingCart, setShoppingCart] = useState({
+    totalAmountPurchase: 0,
+    productsInCart: [],
+    buyerId: "",
+    id: "",
+    cartState: ""
+  });
 
 
   return (
-    <Context.Provider value={[cartContent, setCartContent]}>
+    <Context.Provider value={[shoppingCart, setShoppingCart]}>
       <RouterProvider router={router}/>
     </Context.Provider>
     

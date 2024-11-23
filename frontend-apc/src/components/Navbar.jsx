@@ -18,8 +18,6 @@ import ShoppingCart from './ShoppingCart';
 
 function Navbar(props) {
 
-  const [cantProductsInCart, setCantProductsInCart] = React.useState(0);
-
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -49,6 +47,7 @@ function Navbar(props) {
     handleCloseUserMenu();
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('shoppingCartId');
     navigate('/sign-in');
   }
 
@@ -131,7 +130,7 @@ function Navbar(props) {
 
           <Box sx={{ flexGrow: 0, display:'flex' }}>
             
-            <ShoppingCart cantProducts={cantProductsInCart} />
+            <ShoppingCart/>
 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
