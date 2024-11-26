@@ -15,14 +15,15 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Searcher from './Searcher';
 import {useNavigate} from "react-router-dom";
 import ShoppingCart from './ShoppingCart';
+import { Context } from '../App';
 
 function Navbar(props) {
-
-  const [cantProductsInCart, setCantProductsInCart] = React.useState(0);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const [shoppingCart, setShoppingCart] = React.useContext(Context);
 
   const navigate = useNavigate();
 
@@ -49,7 +50,19 @@ function Navbar(props) {
     handleCloseUserMenu();
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    setShoppingCart({
+      totalAmountPurchase: 0,
+      productsInCart: [],
+      buyerId: "",
+      id: "",
+      cartState: ""
+    });
     navigate('/sign-in');
+  }
+
+  const navigateToPurchases = () => {
+    handleCloseNavMenu();
+    navigate('all-purchases/');
   }
 
   return (
@@ -108,7 +121,7 @@ function Navbar(props) {
               <MenuItem key='Favoritos' onClick={handleCloseNavMenu}>
                   <Typography sx={{ textAlign: 'center' }}>Favoritos</Typography>
               </MenuItem>
-              <MenuItem key='Compras' onClick={handleCloseNavMenu}>
+              <MenuItem key='Compras' onClick={navigateToPurchases}>
                   <Typography sx={{ textAlign: 'center' }}>Compras</Typography>
               </MenuItem>
             </Menu>
@@ -121,7 +134,7 @@ function Navbar(props) {
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Favoritos </Button>
             <Button key='Compras'
-                    onClick={handleCloseNavMenu}
+                    onClick={navigateToPurchases}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Compras </Button>
           </Box>
 
@@ -131,7 +144,7 @@ function Navbar(props) {
 
           <Box sx={{ flexGrow: 0, display:'flex' }}>
             
-            <ShoppingCart cantProducts={cantProductsInCart} />
+            <ShoppingCart/>
 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

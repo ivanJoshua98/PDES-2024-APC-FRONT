@@ -1,68 +1,45 @@
 import { Box, Button, ButtonGroup, IconButton, Typography } from '@mui/material';
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import Grid from '@mui/material/Grid2';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingCartController from '../controller/ShoppingCartController';
 import { Context } from '../App';
 
 const ProductInCart = (props) => {
 
-    const [cartContent, setCartContent] = useContext(Context);
-
     const product = props.product;
 
-    const repetitionsNumber = () => {
-        var result = 0;
-        cartContent.forEach(element => {
-            if(element.id == product.id){
-                result ++;
-            }
-        });
-        return result;
-    }
-
-    const [cant, setCant] = useState(repetitionsNumber());
-
-    const [price, setPrice] = useState(product.price * repetitionsNumber());
-
+    const [shoppingCart, setShoppingCart] = useContext(Context);
 
     const removeJustOne = () => {
-        var index = cartContent.indexOf(product);
-        if (index > -1 && cant > 1 && cartContent[index].id === product.id) {
-            setCartContent(cartContent.toSpliced(index, 1));
-            setCant(cant - 1);
-            setPrice(price  - product.price);
-        }
-    }
+        ShoppingCartController.subtractProductOneTime(shoppingCart.id, product.id).then( response => {
+            setShoppingCart(response.data);
+            console.log("Se resto en uno la cantidad del producto");
+        }).catch( (error) => {
+            console.log("Error al restar en uno la cantidad del producto: ", error);
+        });
+    };
 
     const removeAll = () => {
-        setCartContent(cartContent.filter(element => element.id !== product.id ));
-    }
-
-
-    const existsIdInList = (list, id) => {
-        let exists = false;
-        list.forEach((element) => {
-          exists = exists || (element.id === id);
+        ShoppingCartController.removeProduct(shoppingCart.id, product.id).then( response => {
+            setShoppingCart(response.data);
+        }).catch( (error) => {
+            console.log("Error al quitar el producto del carrito: ", error);
         });
-        return exists;
-      }
+    };
 
-
-    const addToCart = () => {
-        var index = 0;
-        if (existsIdInList(cartContent, product.id)){
-            index = cartContent.indexOf(product);
-        };
-        setCartContent(cartContent.toSpliced(index, 0, product));
-        setCant(cant + 1);
-        setPrice(price + product.price);
-    }
-
+    const addJustOneToCart = () => {
+        ShoppingCartController.addProductOneTime(shoppingCart.id, product.id).then( response => {
+            setShoppingCart(response.data);
+        }).catch( (error) => {
+            console.log("Error al sumas en uno la cantidad del producto: ", error);
+        });
+    };
 
   return (
     <Box display='flex' alignItems='center' margin='1rem' key={product.id}>
-        <img srcSet={`${product.pictures[0]}`}
-                        src={`${product.pictures[0]}`}  
+        <img srcSet={product.picture}
+                        src={product.picture}  
                         alt='product image'
                         loading="lazy" 
                         width='75px' 
@@ -80,12 +57,12 @@ const ProductInCart = (props) => {
             <Grid size={8}>
                 <ButtonGroup variant="outlined" aria-label="Basic button group">
                     <Button sx={{fontWeight:'bold'}} onClick={removeJustOne}>-</Button>
-                    <Button sx={{cursor: 'default'}}>{cant}</Button>
-                    <Button sx={{fontWeight:'bold'}} onClick={addToCart}>+</Button>
+                    <Button sx={{cursor: 'default'}}>{product.amount}</Button>
+                    <Button sx={{fontWeight:'bold'}} onClick={addJustOneToCart}>+</Button>
                 </ButtonGroup>
             </Grid>
             <Grid size={4} justifyItems='right'>
-                <Typography fontWeight='bold'> ${Intl.NumberFormat().format(price)} </Typography>
+                <Typography fontWeight='bold'> ${Intl.NumberFormat().format(product.price * product.amount)} </Typography>
             </Grid>
         </Grid>
     </Box>
