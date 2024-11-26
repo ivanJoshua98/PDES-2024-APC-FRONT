@@ -61,6 +61,12 @@ const getShoppingCartInProgress = (userId) => authenticatedApiClient().get('apc/
         return response;
 });
 
+const getAllPurchasesByUser = (userId) => authenticatedApiClient().get('apc/shoppingCart/allPurchases/' + userId).then (
+    (response) => {
+        return response;
+    }
+) 
+
 
 export default {deleteShoppingCart, 
                 subtractProductOneTime, 
@@ -70,4 +76,5 @@ export default {deleteShoppingCart,
                 createShoppingCart, 
                 finishPurchase,
                 getShoppingCart,
-                getShoppingCartInProgress};
+                getShoppingCartInProgress,
+                getAllPurchasesByUser};

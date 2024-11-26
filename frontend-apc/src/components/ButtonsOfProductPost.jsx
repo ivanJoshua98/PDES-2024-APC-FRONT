@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CardActions from '@mui/material/CardActions';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import IconButton from '@mui/material/IconButton';
@@ -6,18 +6,75 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LinkIcon from '@mui/icons-material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import { Context } from '../App';
+import ShoppingCartController from '../controller/ShoppingCartController';
 
 const ButtonsOfProductPost = (props) => {
 
     const product = props.actualProduct;
 
-    const [cartContent, setCartContent] = useContext(Context);
+    const [shoppingCart, setShoppingCart] = useContext(Context);
+
+    const getUpdateCartContent = (element) => {
+        var mercadoLibreId = element.id;
+        var amount = 1;
+        var picture = element.pictures[0];
+        var link = element.link;
+        var title = element.title;
+        var categoryId = element.categoryId;
+        var price = element.price;
+        var condition = element.condition;
+        return [{mercadoLibreId, amount, picture, link, title, categoryId, price, condition}];
+    };
+
+    const createShoppingCartWithProduct = (newProduct) => {
+        ShoppingCartController.createShoppingCart(getUpdateCartContent(newProduct), localStorage.getItem('userId')).then( response => {
+            setShoppingCart(response.data);
+        }).catch( (error) => {
+            console.log("Error al crear el carrito de compras: ", error);
+        });
+    };
+
+
+    const getProductInCartFromMLId = (anyProduct) => {
+        return shoppingCart.productsInCart.find(element => element.mercadoLibreId === anyProduct.id);
+    }
+
+    const productExistsInCart = (anyProduct) => {
+        return shoppingCart.productsInCart.includes(getProductInCartFromMLId(anyProduct));
+    }
+
+    const addProductOneTime = () => {
+        if(productExistsInCart(product)){
+            ShoppingCartController.addProductOneTime(shoppingCart.id, getProductInCartFromMLId(product).id).then( response => {
+                setShoppingCart(response.data);
+            }).catch( (error) => {
+                console.log("Error al sumar la cantidad del producto: ", error);
+            });
+        } else {
+            ShoppingCartController.addNewProduct(   shoppingCart.id, 
+                                                    product.id,
+                                                    1,
+                                                    product.pictures[0],
+                                                    product.link,
+                                                    product.title,
+                                                    product.categoryId,
+                                                    product.price,
+                                                    product.condition).then( response => {
+                setShoppingCart(response.data);
+            }).catch( (error) => {
+                console.log("Error al agregar un producto nuevo al carrito: ", error);
+            });  
+        };
+    }
+
 
     const addToCart = () => {
-        var data = [];
-        data.push(product);
-        data = data.concat(cartContent);
-        setCartContent(data);
+        if(shoppingCart.productsInCart.length === 0){
+            createShoppingCartWithProduct(product);
+        } else {
+            addProductOneTime();
+        }
+        
     }
 
 

@@ -6,7 +6,7 @@ const EmptyShoppingCart = () => {
   return (
     <Box display='grid' justifyItems='center'>
         <AddShoppingCartIcon color='primary' sx={{fontSize:'40px', marginY:'2rem' }}></AddShoppingCartIcon>
-        <Typography color='primary' fontWeight='bold'>Tu carrito esta vacio</Typography>
+        <Typography color='primary' fontWeight='bold'>Tu carrito está vacío</Typography>
         <Typography color='primary' fontWeight='bold'>¡Agrega productos!</Typography>
     </Box>
   )

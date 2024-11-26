@@ -4,9 +4,11 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 import Product from './pages/Product';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import ShoppingCartDetails from './pages/ShoppingCartDetails';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import SearchedProductsList from './pages/SearchedProductsList';
 import { createContext, useState } from 'react';
+import Purchases from './pages/Purchases';
 
 
 export const Context = createContext();
@@ -22,6 +24,8 @@ function App() {
           <Route path="home" element={<Home/>} />
           <Route path='search-result/:keyWords' element={<SearchedProductsList/>} />
           <Route path='search-result/product/:productId' element={<Product/>} />
+          <Route path='all-purchases' element={<Purchases/>} />
+          <Route path='all-purchases/shopping-cart/:cartId' element={<ShoppingCartDetails/>} />
         </Route>
       </>
     )
