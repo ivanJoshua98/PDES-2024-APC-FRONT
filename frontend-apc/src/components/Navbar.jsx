@@ -60,9 +60,9 @@ function Navbar(props) {
     navigate('/sign-in');
   }
 
-  const navigateToPurchases = () => {
+  const navigateTo = (link) => {
     handleCloseNavMenu();
-    navigate('all-purchases/');
+    navigate(link);
   }
 
   return (
@@ -115,26 +115,26 @@ function Navbar(props) {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              <MenuItem key='Inicio' onClick={() => navigate('/home')}>
+              <MenuItem key='Inicio' onClick={() => navigateTo('home')}>
                   <Typography sx={{ textAlign: 'center' }}>Inicio</Typography>
               </MenuItem>
-              <MenuItem key='Favoritos' onClick={handleCloseNavMenu}>
+              <MenuItem key='Favoritos' onClick={() => navigateTo('/favorite-products')}>
                   <Typography sx={{ textAlign: 'center' }}>Favoritos</Typography>
               </MenuItem>
-              <MenuItem key='Compras' onClick={navigateToPurchases}>
+              <MenuItem key='Compras' onClick={() => navigateTo('/all-purchases')}>
                   <Typography sx={{ textAlign: 'center' }}>Compras</Typography>
               </MenuItem>
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button key='Inicio'
-                    onClick={() => navigate('/home')}
+                    onClick={() => navigateTo('/home')}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Inicio </Button>
             <Button key='Favoritos'
-                    onClick={handleCloseNavMenu}
+                    onClick={() => navigateTo('/favorite-products')}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Favoritos </Button>
             <Button key='Compras'
-                    onClick={navigateToPurchases}
+                    onClick={() => navigateTo('/all-purchases')}
                     sx={{ my: 2, color: 'white', display: 'block' }}> Compras </Button>
           </Box>
 

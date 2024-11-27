@@ -1,4 +1,4 @@
-import { notAuthenticatedApiClient } from "./BaseApi";
+import { authenticatedApiClient, notAuthenticatedApiClient } from "./BaseApi";
 
 const isLoggedIn = () => {
     return localStorage.getItem('token') != null;
@@ -30,5 +30,25 @@ const login = (email, password) => {
         })
 }
 
+const getAllFavoriteProducts = (userId) => authenticatedApiClient().get('/apc/' + userId + '/favorite-products').then( 
+    (response) => {
+        return response;
+});
 
-export default {isLoggedIn, register, login}
+const removeFavoriteProduct = (userId, productId) => authenticatedApiClient().put('/apc/' + userId + '/favorite-products/remove/' + productId).then(
+    (response) => {
+        return response;
+});
+
+const addFavoriteProduct = (userId, productId) => authenticatedApiClient().put('/apc/' + userId + '/favorite-products/add/' + productId).then(
+    (response) => {
+        return response;
+});
+
+const isFavoriteProduct = (userId, productId) => authenticatedApiClient().get('/apc/' + userId + '/is-favorite-product/' + productId).then(
+    (response) => {
+        return response;
+});
+
+
+export default {isLoggedIn, register, login, getAllFavoriteProducts, removeFavoriteProduct, addFavoriteProduct, isFavoriteProduct}
