@@ -71,15 +71,10 @@ const ShoppingCartDetails = () => {
 
     return (
         <Box margin='1rem' marginTop='2rem'>
-            <Box display='flex'>
-                <Typography fontWeight='bold' padding='5px' sx={{border:'2px solid #1976d2',
-                                                                     borderRadius: '10px',
-                                                                     backgroundColor: '#1976d2',
-                                                                     color: 'white',
-                                                                     marginRight:'10px',
-                                                                     width: 'fit-content'}}>
-                    ${Intl.NumberFormat().format(purchasedCart.totalAmountPurchase)} gastados
-                </Typography>
+            {purchasedCart.productsInCart.map( product => (
+                listElement(product)
+            ))}
+            <Box display='flex' marginTop='1rem' justifyContent='right'>
                 <Typography fontWeight='bold' padding='5px' sx={{border:'2px solid #1976d2',
                                                                      borderRadius: '10px',
                                                                      backgroundColor: '#1976d2',
@@ -88,11 +83,15 @@ const ShoppingCartDetails = () => {
                                                                      width: 'fit-content'}}>
                     {productsAmount()} productos
                 </Typography>
+                <Typography fontWeight='bold' padding='5px' sx={{border:'2px solid #1976d2',
+                                                                     borderRadius: '10px',
+                                                                     backgroundColor: '#1976d2',
+                                                                     color: 'white',
+                                                                     marginRight:'10px',
+                                                                     width: 'fit-content'}}>
+                    ${Intl.NumberFormat().format(purchasedCart.totalAmountPurchase)} gastados
+                </Typography>
             </Box>
-            
-            {purchasedCart.productsInCart.map( product => (
-                listElement(product)
-            ))}
         </Box>
     )
 }

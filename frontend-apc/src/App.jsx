@@ -9,6 +9,7 @@ import ProtectedRoutes from './pages/ProtectedRoutes';
 import SearchedProductsList from './pages/SearchedProductsList';
 import { createContext, useState } from 'react';
 import Purchases from './pages/Purchases';
+import FavoriteProducts from './pages/FavoriteProducts';
 
 
 export const Context = createContext();
@@ -26,6 +27,7 @@ function App() {
           <Route path='search-result/product/:productId' element={<Product/>} />
           <Route path='all-purchases' element={<Purchases/>} />
           <Route path='all-purchases/shopping-cart/:cartId' element={<ShoppingCartDetails/>} />
+          <Route path='favorite-products' element={<FavoriteProducts/>} />
         </Route>
       </>
     )
