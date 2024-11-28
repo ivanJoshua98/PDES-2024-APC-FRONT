@@ -43,12 +43,12 @@ const SystemReports = () => {
                 )}
                 {reportOption(
                     <StarHalfIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
-                    '/admin-panel/systemReports/favorite-products-top-five',
+                    '/admin-panel/system-reports/favorite-products-top-five',
                     "Productos favoritos - Top 5"
                 )}
                 {reportOption(
                     <SellIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
-                    '/admin-panel/systemReports/most-purchased-products',
+                    '/admin-panel/system-reports/most-purchased-products',
                     "Productos mas comprados"
                 )}
             </Box>
