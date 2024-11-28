@@ -1,15 +1,16 @@
 import { Box, Typography, Button } from '@mui/material'
 import React from 'react'
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
+import SellIcon from '@mui/icons-material/Sell';
 import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom';
 
-const AdminPanel = () => {
+const SystemReports = () => {
 
     const navigate = useNavigate();
 
-    const adminPanelOption = (icon, link, textButton) => (
+    const reportOption = (icon, link, textButton) => (
         <Grid container spacing={2} width='60%' sx={{   padding: '5px',
                                                         margin: '1rem',
                                                         border:'2px solid #1976d2', 
@@ -32,22 +33,27 @@ const AdminPanel = () => {
             <Box display='flex' justifyContent='center' margin='1rem'>
                 <Typography sx={{   color:'#1976d2', 
                                     fontSize: '40px',
-                                    fontWeight:'bold'}}>Panel de administrador</Typography>
+                                    fontWeight:'bold'}}>Reportes del sistema</Typography>
             </Box>
             <Box margin='1rem' sx={{placeItems: 'center'}}>
-                {adminPanelOption(
-                    <SupervisorAccountIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
-                    '/admin-panel/manage-users',
-                    "Administración de usuarios"
+                {reportOption(
+                    <QueryStatsIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
+                    '/admin-panel/system-reports/users-with-most-purchases',
+                    "Usuarios con mas compras"
                 )}
-                {adminPanelOption(
-                    <BarChartIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
-                    '/admin-panel/system-reports',
-                    "Reportes del sistema"
+                {reportOption(
+                    <StarHalfIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
+                    '/admin-panel/systemReports/favorite-products-top-five',
+                    "Productos favoritos - Top 5"
+                )}
+                {reportOption(
+                    <SellIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
+                    '/admin-panel/systemReports/most-purchased-products',
+                    "Productos mas comprados"
                 )}
             </Box>
         </Box>
     )
 }
 
-export default AdminPanel
+export default SystemReports
