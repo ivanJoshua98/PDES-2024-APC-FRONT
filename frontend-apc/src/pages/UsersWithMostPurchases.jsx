@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Chip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid2';
 import SystemReportController from '../controller/SystemReportController';
@@ -8,6 +8,16 @@ import { useNavigate } from 'react-router-dom';
 const UsersWithMostPurchases = () => {
 
     const [ranking, setRanking] = useState([]);
+
+    const colorEnabled = '#1976d2';
+
+    const colorDisabled = '#bdbdbd';
+
+    const [colorButton1, setColorButton1] = useState(colorEnabled);
+
+    const [colorButton2, setColorButton2] = useState(colorDisabled);
+
+    const [descriptionText, setDescriptionText] = useState(" compras realizadas");
 
     const navigate = useNavigate();
 
@@ -38,7 +48,7 @@ const UsersWithMostPurchases = () => {
                                                                  backgroundColor: '#1976d2',
                                                                  color: 'white',
                                                                  marginRight:'10px'}}>
-                    {user.purchases_count} compras realizadas
+                    {user.purchases_count + descriptionText} 
                 </Typography>
                 <Button sx={{fontWeight:'bold'}} 
                         onClick={() => navigate('/admin-panel/manage-users/all-purchases/'+ user.userName+ '/' + user.id)}>Ver mas</Button>
@@ -53,6 +63,28 @@ const UsersWithMostPurchases = () => {
             <Typography color='primary' fontWeight='bold'>Aun no hay compras realizadas</Typography>
         </Box>
     )
+
+    const orderByProducts = () => {
+        SystemReportController.getUsersWithMostPurchasedProducts().then( response => {
+            setRanking(response.data);
+            setColorButton1(colorDisabled);
+            setColorButton2(colorEnabled);
+            setDescriptionText(" productos comprados")
+        }).catch(error => {
+            console.log("Error al obtener los usuarios con mas compras: ", error);
+        })
+    }
+
+    const orderByShoppingCarts = () => {
+        SystemReportController.getUsersWithMostPurchases().then( response => {
+            setRanking(response.data);
+            setColorButton1(colorEnabled);
+            setColorButton2(colorDisabled);
+            setDescriptionText(" compras realizadas")
+        }).catch(error => {
+            console.log("Error al obtener los usuarios con mas compras: ", error);
+        })
+    }
     
     return (
         <Box>
@@ -60,6 +92,15 @@ const UsersWithMostPurchases = () => {
                 <Typography sx={{   color:'#1976d2', 
                                     fontSize: '40px',
                                     fontWeight:'bold'}}>Top 5 usuarios con mas compras</Typography>
+            </Box>
+            <Box display='flex' justifyContent='center' alignItems='center' width='60%'>
+                <Typography color='primary' fontWeight='bold' margin='1rem'>Ordenar por:</Typography>
+                <Chip label="Carritos de compras finalizados" sx={{color:'white', margin:'1rem'}}
+                        style={{backgroundColor: colorButton1}}
+                        onClick={orderByShoppingCarts}/>
+                <Chip label="Products comprados" sx={{color:'white', margin:'1rem'}}
+                        style={{backgroundColor: colorButton2}}
+                        onClick={orderByProducts}/> 
             </Box>
             <Box margin='1rem' sx={{placeItems: 'center'}}>
                 {ranking.length === 0 ?
