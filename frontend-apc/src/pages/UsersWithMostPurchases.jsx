@@ -1,12 +1,15 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid2';
 import SystemReportController from '../controller/SystemReportController';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import { useNavigate } from 'react-router-dom';
 
 const UsersWithMostPurchases = () => {
 
     const [ranking, setRanking] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect( () => {
         SystemReportController.getUsersWithMostPurchases().then( response => {
@@ -36,7 +39,9 @@ const UsersWithMostPurchases = () => {
                                                                  color: 'white',
                                                                  marginRight:'10px'}}>
                     {user.purchases_count} compras realizadas
-                 </Typography>
+                </Typography>
+                <Button sx={{fontWeight:'bold'}} 
+                        onClick={() => navigate('/admin-panel/manage-users/all-purchases/'+ user.userName+ '/' + user.id)}>Ver mas</Button>
             </Grid>
         </Grid>
     );

@@ -30,7 +30,6 @@ const PurchasedCart = (props) => {
                                                         borderRadius: '10px'}}>
             <Grid size={8} display='flex' justifyContent='left' alignItems='center'>
                 <ShoppingCartCheckoutIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>            
-                <Button sx={{fontWeight:'bold'}} onClick={navigateToCart}>Ver mas</Button>
                 <Typography fontWeight='bold' margin='1rem'>{amountOfProducts()} productos comprados </Typography>        
             </Grid>
             <Grid size={4} display='flex' justifyContent='right' alignItems='center'>
@@ -41,6 +40,7 @@ const PurchasedCart = (props) => {
                                                                  marginRight:'10px'}}>
                     ${Intl.NumberFormat().format(cart.totalAmountPurchase)} gastados
                  </Typography>
+                 <Button sx={{fontWeight:'bold'}} onClick={navigateToCart}>Ver mas</Button>
             </Grid>
         </Grid>
     )
