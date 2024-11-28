@@ -7,15 +7,18 @@ import ProductController from '../controller/ProductController';
 import EmptyFavoritesList from '../components/EmptyFavoritesList';
 import LoadingScreenProductSearch from '../components/LoadingScreenProductSearch';
 import ProductList from '../components/ProductList';
+import { useParams } from 'react-router-dom';
 
 
-const FavoriteProducts = () => {
+const FavoriteProductsFromOtherUser = () => {
 
     const [favoriteProducts, setFavoriteProducts] = useState([]);
 
     const [loading, setLoading] = useState(true); 
 
-    const userId = sessionStorage.getItem('userId');
+    let {userId} = useParams();
+
+    let{userName} = useParams();
 
     const groupBy = (amount, list) => {
         var result= [];
@@ -50,20 +53,21 @@ const FavoriteProducts = () => {
             <Box display='flex' justifyContent='center' margin='1rem'>
                     <Typography sx={{   color:'#1976d2', 
                                         fontSize: '40px',
-                                        fontWeight:'bold'}}>Mis favoritos</Typography>
+                                        fontWeight:'bold'}}>Favoritos de {userName}</Typography>
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {loading ? 
                     <LoadingScreenProductSearch/> 
                     :
                     favoriteProducts.length === 0 ? 
-                        <EmptyFavoritesList textTitle="No tienes productos favoritos" textBody="¡Busca productos y agregalos!" /> 
+                        <EmptyFavoritesList textTitle={userName} textBody={"no tiene productos favoritos"} /> 
                         :
                         <ProductList products={favoriteProducts}/>
                 }
             </Box>
         </Box>
     )
+
 }
 
-export default FavoriteProducts;
+export default FavoriteProductsFromOtherUser

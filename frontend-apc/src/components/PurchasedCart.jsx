@@ -1,5 +1,5 @@
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { Box, Button, Grid2, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';

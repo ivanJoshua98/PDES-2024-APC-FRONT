@@ -18,7 +18,7 @@ const ButtonsOfProductPost = (props) => {
 
     const [isFavorite, setIsFavorite] = useState(false);
 
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
 
     useEffect( () => {
         UserController.isFavoriteProduct(userId, product.id).then( response => {
@@ -41,7 +41,7 @@ const ButtonsOfProductPost = (props) => {
     };
 
     const createShoppingCartWithProduct = (newProduct) => {
-        ShoppingCartController.createShoppingCart(getUpdateCartContent(newProduct), localStorage.getItem('userId')).then( response => {
+        ShoppingCartController.createShoppingCart(getUpdateCartContent(newProduct), userId).then( response => {
             setShoppingCart(response.data);
         }).catch( (error) => {
             console.log("Error al crear el carrito de compras: ", error);

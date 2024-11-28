@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import ShoppingCartController from '../controller/ShoppingCartController';
 import { Box, Typography } from '@mui/material';
 import PurchasedCart from '../components/PurchasedCart';
 import EmptyPurchasesList from '../components/EmptyPurchasesList';
 
+const PurchasesFromOtherUser = () => {
 
-const Purchases = () => {
+    let {userId} = useParams();
 
-    const [purchases, setPurchases] = useState([{
-        totalAmountPurchase: 0,
-        productsInCart: [],
-        buyerId: "",
-        id: "",
-        cartState: ""
-    }]);
+    let{userName} = useParams();
 
-    const userId = sessionStorage.getItem("userId");
+    const [purchases, setPurchases] = useState([]);
 
     useEffect(() => {
         ShoppingCartController.getAllPurchasesByUser(userId).then( (response) => {
-            console.log("Carritos encontrados: ", response.data);
             setPurchases(response.data);
-            console.log("Se actualizo la lista: ", purchases);
         }).catch( (error) => {
             console.log("Error al obtener las compras realizadas")
         });
@@ -36,10 +30,10 @@ const Purchases = () => {
             <Box display='flex' justifyContent='center' margin='1rem'>
                 <Typography sx={{   color:'#1976d2', 
                                     fontSize: '40px',
-                                    fontWeight:'bold'}}>Mis compras</Typography>
+                                    fontWeight:'bold'}}>Compras de {userName}</Typography>
             </Box>
             <Box margin='1rem' sx={{placeItems: 'center'}}>
-                {isEmptyList()? <EmptyPurchasesList textTitle="No tienes compras realizadas" textBody="¡Busca productos y agregalos al carrito!"/> :
+                {isEmptyList()? <EmptyPurchasesList textTitle={userName} bodyText="no tiene compras realizadas"/> :
                     purchases.map( (cart) => (
                         <PurchasedCart cart={cart} key={cart.id}/>
                     ))
@@ -47,7 +41,8 @@ const Purchases = () => {
             </Box>
         </Box>
     );
+
+    
 }
 
-
-export default Purchases;            
+export default PurchasesFromOtherUser

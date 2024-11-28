@@ -1,15 +1,15 @@
 import { authenticatedApiClient, notAuthenticatedApiClient } from "./BaseApi";
 
 const isLoggedIn = () => {
-    return localStorage.getItem('token') != null;
+    return sessionStorage.getItem('token') != null;
 }
 
 
 const saveCredentials = (response) => {
     if (response.headers && response.headers.hasAuthorization) {
         const authToken = response.headers.getAuthorization();
-        localStorage.setItem('token', authToken.toString());
-        localStorage.setItem('userId', response.data.id);
+        sessionStorage.setItem('token', authToken.toString());
+        sessionStorage.setItem('userId', response.data.id);
     } else {
         return Promise.reject("No Authorization header received in response");
     }
@@ -51,4 +51,34 @@ const isFavoriteProduct = (userId, productId) => authenticatedApiClient().get('/
 });
 
 
-export default {isLoggedIn, register, login, getAllFavoriteProducts, removeFavoriteProduct, addFavoriteProduct, isFavoriteProduct}
+const isAdmin = (userId) => authenticatedApiClient().get('/apc/users/is-admin/'+ userId).then(
+    (response) => {
+        return response;
+});
+
+const addAdminRoleToUser = (userToBeAdmin) => authenticatedApiClient().put('/apc/users/add-admin/' + userToBeAdmin).then(
+    (response) => {
+        return response;
+});
+
+const removeAdminRoleToUser = (userToRemoveAdmin) => authenticatedApiClient().put('/apc/users/remove-admin/' + userToRemoveAdmin).then(
+    (response) => {
+        return response;
+});
+
+const getUserByEmailOrUserName = (search) => authenticatedApiClient().get('/apc/users/search/' + search).then(
+    (response) => {
+        return response;
+});
+
+export default {isLoggedIn, 
+                register, 
+                login, 
+                getAllFavoriteProducts, 
+                removeFavoriteProduct, 
+                addFavoriteProduct, 
+                isFavoriteProduct,
+                isAdmin,
+                addAdminRoleToUser,
+                removeAdminRoleToUser,
+                getUserByEmailOrUserName}

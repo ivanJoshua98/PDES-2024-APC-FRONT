@@ -8,7 +8,7 @@ export const notAuthenticatedApiClient = axios.create({
 
 
 export const authenticatedApiClient = () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token){
         const client = axios.create({
             baseURL: BASE_URL,
