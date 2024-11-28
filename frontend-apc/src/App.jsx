@@ -10,6 +10,10 @@ import SearchedProductsList from './pages/SearchedProductsList';
 import { createContext, useState } from 'react';
 import Purchases from './pages/Purchases';
 import FavoriteProducts from './pages/FavoriteProducts';
+import AdminPanel from './pages/AdminPanel';
+import ManageUsers from './pages/ManageUsers';
+import PurchasesFromOtherUser from './pages/PurchasesFromOtherUser';
+import FavoriteProductsFromOtherUser from './pages/FavoriteProductsFromOtherUser';
 
 
 export const Context = createContext();
@@ -28,6 +32,10 @@ function App() {
           <Route path='all-purchases' element={<Purchases/>} />
           <Route path='all-purchases/shopping-cart/:cartId' element={<ShoppingCartDetails/>} />
           <Route path='favorite-products' element={<FavoriteProducts/>} />
+          <Route path='admin-panel' element={<AdminPanel />} />
+          <Route path='admin-panel/manage-users' element={<ManageUsers />} />
+          <Route path='admin-panel/manage-users/all-purchases/:userName/:userId' element={<PurchasesFromOtherUser/>} />
+          <Route path='admin-panel/manage-users/favorite-products/:userName/:userId' element={<FavoriteProductsFromOtherUser />} />
         </Route>
       </>
     )

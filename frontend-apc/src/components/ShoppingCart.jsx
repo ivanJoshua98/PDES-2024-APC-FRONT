@@ -18,7 +18,7 @@ const ShoppingCart = () => {
     const [shoppingCart, setShoppingCart] = useContext(Context);
   
     useEffect(() => {
-      ShoppingCartController.getShoppingCartInProgress(localStorage.getItem("userId")).then( response => {
+      ShoppingCartController.getShoppingCartInProgress(sessionStorage.getItem("userId")).then( response => {
         setShoppingCart(response.data);
       }).catch( error => {
         console.log("Error al obtener carrito en progreso: ", error);
