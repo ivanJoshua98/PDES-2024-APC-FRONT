@@ -45,7 +45,7 @@ const UserSearcher = () => {
 
     return (
         <Box component="form" noValidate sx={{ width:'100%', textAlign:'center'}} >
-            <TextField  id="filled-basic" variant="outlined" 
+            <TextField  id="user-searcher" variant="outlined" 
                         placeholder='Busca por email o nombre de usuario'
                         sx={{width:'30%'}}
                         onChange={(event) => setKeyWords(event.target.value)}

@@ -16,6 +16,12 @@ const getTopFiveFavoriteProducts = () => authenticatedApiClient().get('/apc/repo
         return response;
 });
 
+const getTopFivePurchasedProducts = () => authenticatedApiClient().get('/apc/reports/most-purchased-products').then(
+    (response) => {
+        return response;
+});
+
 export default {getUsersWithMostPurchases,
                 getUsersWithMostPurchasedProducts,
-                getTopFiveFavoriteProducts};
+                getTopFiveFavoriteProducts,
+                getTopFivePurchasedProducts};

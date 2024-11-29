@@ -17,6 +17,7 @@ import FavoriteProductsFromOtherUser from './pages/FavoriteProductsFromOtherUser
 import SystemReports from './pages/SystemReports';
 import UsersWithMostPurchases from './pages/UsersWithMostPurchases';
 import TopFiveFavoriteProducts from './pages/TopFiveFavoriteProducts';
+import MostPurchasedProducts from './pages/MostPurchasedProducts';
 
 
 export const Context = createContext();
@@ -42,6 +43,7 @@ function App() {
           <Route path='admin-panel/system-reports' element={<SystemReports />} />
           <Route path='admin-panel/system-reports/users-with-most-purchases' element={<UsersWithMostPurchases />} />
           <Route path='admin-panel/system-reports/favorite-products-top-five' element={<TopFiveFavoriteProducts />} />
+          <Route path='admin-panel/system-reports/most-purchased-products' element={<MostPurchasedProducts />} />
         </Route>
       </>
     )
