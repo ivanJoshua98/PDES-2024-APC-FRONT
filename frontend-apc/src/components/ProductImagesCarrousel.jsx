@@ -26,7 +26,7 @@ const ProductImagesCarrousel = (props) => {
 
   return (
     <Box>
-      <Box >
+      <Box justifySelf='center'>
         <img srcSet={`${pictures[activeStep]}`}
                         src={`${pictures[activeStep]}`}  
                         alt='product image'

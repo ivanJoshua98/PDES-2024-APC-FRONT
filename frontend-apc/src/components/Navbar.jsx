@@ -12,15 +12,38 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useNavigate } from 'react-router-dom';
+import Searcher from './Searcher';
+import {useNavigate} from "react-router-dom";
+import ShoppingCart from './ShoppingCart';
+import { Context } from '../App';
+import UserController from '../controller/UserController';
 
-function Navbar() {
+function Navbar(props) {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  const [shoppingCart, setShoppingCart] = React.useContext(Context);
+
   const navigate = useNavigate();
+
+  const {window} = props;
+
+  const path = window !== undefined ? window().location.href : "";
+
+  const userId = sessionStorage.getItem('userId');
+
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  React.useEffect( () => {
+    UserController.isAdmin(userId).then( response => {
+      setIsAdmin(response.data);
+      console.log("El usuario es admin: ", response.data);
+    }).catch( error => {
+      console.log("Error al verificar si el usuario es admin: ", error);
+    });
+  }, [userId]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -39,33 +62,47 @@ function Navbar() {
 
   const handleCloseSesion = () => {
     handleCloseUserMenu();
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+    sessionStorage.clear();
+    setShoppingCart({
+      totalAmountPurchase: 0,
+      productsInCart: [],
+      buyerId: "",
+      id: "",
+      cartState: ""
+    });
     navigate('/sign-in');
+  }
+
+  const navigateTo = (link) => {
+    handleCloseNavMenu();
+    navigate(link);
   }
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ShoppingCartIcon fontSize='large' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            APC
-          </Typography>
+
+          <Box display='flex'>
+            <ShoppingCartIcon fontSize='large' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="/home"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              APC
+            </Typography>
+          </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -94,50 +131,44 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              <MenuItem key='Inicio' onClick={() => navigate('/')}>
+              <MenuItem key='Inicio' onClick={() => navigateTo('home')}>
                   <Typography sx={{ textAlign: 'center' }}>Inicio</Typography>
               </MenuItem>
-              <MenuItem key='Favoritos' onClick={handleCloseNavMenu}>
+              <MenuItem key='Favoritos' onClick={() => navigateTo('/favorite-products')}>
                   <Typography sx={{ textAlign: 'center' }}>Favoritos</Typography>
               </MenuItem>
-              <MenuItem key='Compras' onClick={handleCloseNavMenu}>
+              <MenuItem key='Compras' onClick={() => navigateTo('/all-purchases')}>
                   <Typography sx={{ textAlign: 'center' }}>Compras</Typography>
               </MenuItem>
             </Menu>
           </Box>
-
-          <ShoppingCartIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            APC
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, width:'40%'}}>
             <Button key='Inicio'
-                    onClick={() => navigate('/home')}
-                    sx={{ my: 2, color: 'white', display: 'block' }}> Inicio </Button>
+                    onClick={() => navigateTo('/home')}
+                    sx={{ margin: 1, color: 'white' }}> Inicio </Button>
             <Button key='Favoritos'
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}> Favoritos </Button>
+                    onClick={() => navigateTo('/favorite-products')}
+                    sx={{ margin: 1, marginRight: 2, color: 'white' }}> Favoritos </Button>
             <Button key='Compras'
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}> Compras </Button>
+                    onClick={() => navigateTo('/all-purchases')}
+                    sx={{ margin: 1, color: 'white' }}> Compras </Button>
+            {isAdmin ? 
+              <Button key='Admin-panel'
+                      onClick={() => navigateTo('/admin-panel')}
+                      sx={{ margin: 1, color: 'white'}}> Panel de administrador </Button>
+              :
+              <></>
+            }
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
+
+          <Box sx={{width:'70%', display:'flex', justifyContent:'right', alignItems:'center', marginBottom:'1rem', marginTop:'1rem'}}>
+              {path.includes("/home")? <></> : <Searcher/>}
+          </Box>
+
+          <Box sx={{ flexGrow: 0, display:'flex' }}>
+            
+            <ShoppingCart/>
+
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

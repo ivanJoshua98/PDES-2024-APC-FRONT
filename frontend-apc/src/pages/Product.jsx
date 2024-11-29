@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ProductController from '../controller/ProductController';
-import NavbarWithSearcher from '../components/NavbarWithSearcher';
 import ProductImagesCarrousel from '../components/ProductImagesCarrousel';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -38,7 +37,6 @@ const Product = () => {
 
   return (
     <div>
-      <NavbarWithSearcher/>
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
         {loading ? <LoadingScreenProduct/> :
         <Card sx={{width: '80%', marginTop: '1rem'}}>
