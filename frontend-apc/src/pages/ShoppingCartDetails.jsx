@@ -18,7 +18,7 @@ const ShoppingCartDetails = () => {
     let {cartId} = useParams();
 
     useEffect( () => {
-        ShoppingCartController.getShoppingCart(cartId).then( (response) => {
+        ShoppingCartController.getShoppingCartById(cartId).then( (response) => {
             setPurchasedCart(response.data);
         }).catch( (error) => {
             console.log("Error al obtener el carrito de compras: ", error);

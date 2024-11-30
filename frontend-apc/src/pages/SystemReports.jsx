@@ -49,7 +49,7 @@ const SystemReports = () => {
                 {reportOption(
                     <SellIcon color='primary' sx={{fontSize: '40px', margin:'1rem'}}/>,
                     '/admin-panel/system-reports/most-purchased-products',
-                    "Productos mas comprados"
+                    "Productos mas vendidos"
                 )}
             </Box>
         </Box>

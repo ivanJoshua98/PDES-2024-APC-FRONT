@@ -5,6 +5,7 @@ import ProductController from '../controller/ProductController';
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import LinkIcon from '@mui/icons-material/Link';
+import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch';
 
 const TopFiveFavoriteProducts = () => {
 
@@ -75,13 +76,13 @@ const TopFiveFavoriteProducts = () => {
     );
 
     return (
-        <Box>
-            <Box display='flex' justifyContent='center' margin='1rem'>
+        <Box sx={{placeItems:'center'}}>
+            <Box margin='1rem'>
                 <Typography sx={{   color:'#1976d2', 
                                     fontSize: '40px',
                                     fontWeight:'bold'}}>Top 5 - Productos Favoritos</Typography>
             </Box>
-            <Box sx={{display: 'grid', justifyContent: 'center', alignItems: 'center', marginBottom:'2rem'}}>
+            <Box sx={{marginBottom:'2rem', width:'90%'}}>
                 {
                     favoriteProducts.reverse().map(product => (
                         listElement(product, getTimesChosenFavorite(product))    

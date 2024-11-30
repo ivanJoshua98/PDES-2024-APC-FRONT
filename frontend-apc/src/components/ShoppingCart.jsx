@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Badge from '@mui/material/Badge';
@@ -16,13 +16,25 @@ import { Context } from '../App';
 const ShoppingCart = () => {
 
     const [shoppingCart, setShoppingCart] = useContext(Context);
+
+    const [hasShoppingCartInprogress, setHasShoppingCartInprogress] = useState(false);
   
     useEffect(() => {
       ShoppingCartController.getShoppingCartInProgress(sessionStorage.getItem("userId")).then( response => {
-        setShoppingCart(response.data);
-      }).catch( error => {
-        console.log("Error al obtener carrito en progreso: ", error);
-      });
+        switch (response.status) {
+          case 404:
+            setHasShoppingCartInprogress(false);
+            break;
+          
+          case 200:
+            setShoppingCart(response.data);
+            setHasShoppingCartInprogress(true);
+            break;
+          
+          default:
+            console.log("Error al obtener carrito en progreso: ", response);
+        }
+      })
     }, [setShoppingCart]);
 
 
@@ -58,7 +70,6 @@ const style = {
 
   const finishPurchase = () => {
     ShoppingCartController.finishPurchase(shoppingCart.id).then( response => {
-      console.log('Carrito de compras finalizado: ', response);
       handleCloseModalFinishPurchase();
       setShoppingCart({
         totalAmountPurchase: 0,
@@ -75,7 +86,6 @@ const style = {
 
   const deleteShoppingCart = () => {
     ShoppingCartController.deleteShoppingCart(shoppingCart.id).then( response => {
-      console.log('Carrito de compras eliminado: ', response);
       handleCloseModalDeleteCart();
       setShoppingCart({
         totalAmountPurchase: 0,
@@ -159,27 +169,32 @@ const style = {
             <Typography marginRight='1rem' sx={{color:'white'}}>CARRITO DE COMPRAS</Typography>
           </Box>
           
-          {isEmptyCart()? <EmptyShoppingCart/> : shoppingCart.productsInCart.map(
-            (product) => <ProductInCart key={product.id} product={product} />
-          )}
+          {hasShoppingCartInprogress? 
+            shoppingCart.productsInCart.map(
+              (product) => <ProductInCart key={product.id} product={product} />
+            )
+            :
+            <EmptyShoppingCart/> 
+          }
 
-          {isEmptyCart()? <></> :
+          {hasShoppingCartInprogress? 
             <Box display='grid' justifyContent='right' marginRight='1rem'>
               <Typography fontWeight='bold'> Total en el carrito: ${Intl.NumberFormat().format(shoppingCart.totalAmountPurchase)}</Typography>
               <Button variant='text' sx={{justifyContent:'right'}} onClick={handleOpenModalDeleteCart}>Vaciar carrito</Button>
-            </Box>}
+            </Box>
+            :
+            <></>
+          }
 
-          {isEmptyCart()? <></> : 
+          {hasShoppingCartInprogress?
             <Box display='flex' justifyContent='center' marginTop='1rem'>
               <Button variant='contained' onClick={handleOpenModalFinishPurchase}>Finalizar Compra</Button>
-            </Box>}
+            </Box>
+            :
+            <></>
+          }
         </Box>
       );
-
-    
-      const isEmptyCart = () => {
-        return shoppingCart.productsInCart.length <= 0;
-      }
 
 
       const amountProductsInCart = () => {

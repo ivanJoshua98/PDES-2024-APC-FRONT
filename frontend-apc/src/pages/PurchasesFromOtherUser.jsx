@@ -4,6 +4,7 @@ import ShoppingCartController from '../controller/ShoppingCartController';
 import { Box, Typography } from '@mui/material';
 import PurchasedCart from '../components/PurchasedCart';
 import EmptyPurchasesList from '../components/EmptyPurchasesList';
+import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch';
 
 const PurchasesFromOtherUser = () => {
 
@@ -11,11 +12,14 @@ const PurchasesFromOtherUser = () => {
 
     let{userName} = useParams();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const [purchases, setPurchases] = useState([]);
 
     useEffect(() => {
         ShoppingCartController.getAllPurchasesByUser(userId).then( (response) => {
             setPurchases(response.data);
+            setIsLoading(false);
         }).catch( (error) => {
             console.log("Error al obtener las compras realizadas")
         });
@@ -33,10 +37,15 @@ const PurchasesFromOtherUser = () => {
                                     fontWeight:'bold'}}>Compras de {userName}</Typography>
             </Box>
             <Box margin='1rem' sx={{placeItems: 'center'}}>
-                {isEmptyList()? <EmptyPurchasesList textTitle={userName} bodyText="no tiene compras realizadas"/> :
-                    purchases.map( (cart) => (
-                        <PurchasedCart cart={cart} key={cart.id}/>
-                    ))
+                {isLoading?
+                    <LoadingScreenOptionsSearch />
+                    :
+                    isEmptyList()? 
+                        <EmptyPurchasesList textTitle={userName} textBody="No tiene compras realizadas" /> 
+                        :
+                        purchases.map( (cart) => (
+                            <PurchasedCart cart={cart} key={cart.id}/>
+                        ))
                 }
             </Box>
         </Box>

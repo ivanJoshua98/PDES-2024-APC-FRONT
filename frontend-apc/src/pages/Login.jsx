@@ -47,23 +47,42 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    UserController.login(email, password)
-        .then((result) => {
-          console.log('response: ', result);
+    UserController.login(email, password).then((response) => {
+      switch (response.status) {
+        case 200:
           navigate('/home');
-        })
-        .catch(err => {
-          console.log('error:', err);
-          handleErrors(err);
-         })
+          break;
+
+        case 400:
+          handleErrorsBadRequest(response)
+          break;
+
+        case 404:
+          handleErrorNotFound(response)
+          break;
+
+        default:
+          handleErrorNetwork();
+          console.log('Error al iniciar sesion: ', response)
+      }
+    });
+  };
+
+  const handleErrorNetwork = (error) => {
+      setDataError("Hubo un error. Intentelo mas tarde");
+      setDisplayError(true)
   }
 
-  const handleErrors = (error) => {
-    if(error.code === "ERR_NETWORK") {
-      setDisplayError(true)
+  const handleErrorsBadRequest = (error) => {
+    if(error.response.data.includes("password")){
+      setDataError("La contraseña ingresada no es correcta");
+      setShowDataError(true);
     }
-    if(error.code === "ERR_BAD_REQUEST" && error.response.data.hasOwnProperty('password')){
-      setDataError(error.response.data.password);
+  }
+    
+  const handleErrorNotFound = (error) => {
+    if(error.response.data.includes("email")){
+      setDataError("El correo ingresado no existe");
       setShowDataError(true);
     }
   }
@@ -120,7 +139,7 @@ const Login = () => {
                       onChange={(newEmailEvent) => changeEmailValue(newEmailEvent)}/>
 
           {passwordField({fieldId: "password", label: "Contraseña", password: password})}
-          <Alert severity="error" sx={{display: showDataError? 'flex' : 'none'}}>{dataError}</Alert>
+          {showDataError? <Alert severity="error" >{dataError}</Alert> : <></>}
 
           <Button color='primary' type="submit" fullWidth variant="contained"
                   sx={{ mt: 3, mb: 2, fontSize: 'x-large', fontWeight: 'bold' }}>

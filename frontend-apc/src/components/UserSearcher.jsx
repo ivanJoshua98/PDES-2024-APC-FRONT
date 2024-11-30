@@ -23,7 +23,6 @@ const UserSearcher = () => {
         UserController.getUserByEmailOrUserName(keyWords).then( response => {
             setUser(response.data);
             setShowResult(true);
-            console.log("Respuesta de la busqueda: ", response.data);
         }).catch( error => {
             if(error.status === 404){
                 setResponseStatus(error.status);

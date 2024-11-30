@@ -21,7 +21,7 @@ const ButtonsOfProductPost = (props) => {
     const userId = sessionStorage.getItem('userId');
 
     useEffect( () => {
-        UserController.isFavoriteProduct(userId, product.id).then( response => {
+        UserController.isFavoriteProduct(product.id).then( response => {
             setIsFavorite(response.data);
         }).catch( error => {
             console.log("Error al verificar si es producto favorito: ", error);
@@ -59,14 +59,13 @@ const ButtonsOfProductPost = (props) => {
 
     const addProductOneTime = () => {
         if(productExistsInCart(product)){
-            ShoppingCartController.addProductOneTime(shoppingCart.id, getProductInCartFromMLId(product).id).then( response => {
+            ShoppingCartController.addProductOneTime(getProductInCartFromMLId(product).id).then( response => {
                 setShoppingCart(response.data);
             }).catch( (error) => {
                 console.log("Error al sumar la cantidad del producto: ", error);
             });
         } else {
-            ShoppingCartController.addNewProduct(   shoppingCart.id, 
-                                                    product.id,
+            ShoppingCartController.addNewProduct(   product.id,
                                                     1,
                                                     product.pictures[0],
                                                     product.link,

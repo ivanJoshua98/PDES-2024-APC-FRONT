@@ -39,7 +39,6 @@ function Navbar(props) {
   React.useEffect( () => {
     UserController.isAdmin(userId).then( response => {
       setIsAdmin(response.data);
-      console.log("El usuario es admin: ", response.data);
     }).catch( error => {
       console.log("Error al verificar si el usuario es admin: ", error);
     });
