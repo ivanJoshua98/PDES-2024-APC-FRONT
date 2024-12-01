@@ -12,7 +12,6 @@ const PurchasedCart = (props) => {
 
     const amountOfProducts = () => {
         var amount = 0;
-        console.log("Este es el carrito que me llego: ", cart);
         cart.productsInCart.forEach(element => {
             amount = amount + element.amount;
         });

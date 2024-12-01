@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import ProductController from '../controller/ProductController';
 import { useParams } from 'react-router-dom';
-import LoadingScreenProductSearch from '../components/LoadingScreenProductSearch';
+import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch';
 import ProductList from '../components/ProductList';
 
 function SearchedProductsList() {
@@ -17,7 +17,7 @@ function SearchedProductsList() {
         ProductController.searchProductsByWords(keyWords).then(res => {
             setProducts(res.data);
             setLoading(false);
-        }).catch(error => console.log('error:', error));
+        }).catch(error => console.log('Error al buscar los productos:', error));
     }, [keyWords]);
 
 
@@ -27,7 +27,7 @@ function SearchedProductsList() {
             alignItems: 'center'}}>
 
       {loading ? 
-        <LoadingScreenProductSearch/> 
+        <LoadingScreenOptionsSearch/> 
         :
         <ProductList products={products}/>
       }

@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ButtonsOfProductPost from '../components/ButtonsOfProductPost';
 import AttributesTable from '../components/AttributesTable';
-import LoadingScreenProduct from '../components/LoadingScreenProduct';
+import LoadingScreenOptions from '../components/LoadingScreenOptions';
 
 
 const Product = () => {
@@ -31,14 +31,14 @@ const Product = () => {
     ProductController.getProductByIdFromML(productId).then(res => {
         setProduct(res.data);
         setLoading(false);
-    }).catch(error => console.log('error:', error));
+    }).catch(error => console.log('Error al obtener el producto:', error));
   }, [productId]);
 
 
   return (
     <div>
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
-        {loading ? <LoadingScreenProduct/> :
+        {loading ? <LoadingScreenOptions/> :
         <Card sx={{width: '80%', marginTop: '1rem'}}>
           <Box sx={{ width: '100%' }}>
             <Grid container rowSpacing={1} columnSpacing={2}>

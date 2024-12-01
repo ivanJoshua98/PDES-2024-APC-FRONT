@@ -10,6 +10,11 @@ const saveCredentials = (response) => {
         const authToken = response.headers.getAuthorization();
         sessionStorage.setItem('token', authToken.toString());
         sessionStorage.setItem('userId', response.data.id);
+        isAdmin(response.data.id).then( response => {
+            sessionStorage.setItem('isAdmin', response.data);
+        }).catch(error => {
+            console.log("Error al verificar si es admin: ", error);
+        })
     } else {
         return Promise.reject("No Authorization header received in response");
     }
@@ -19,33 +24,43 @@ const register = (email, password, userName) => notAuthenticatedApiClient.post('
         email,
         password,
         userName
-    }).then((response) => {
-    return response;
-})
+    }).then( 
+        (response) => {
+            return response;
+});
 
-const login = (email, password) => {
-    return notAuthenticatedApiClient.post('/apc/log-in', {email, password})
-        .then((response) => {
-            return saveCredentials(response);
-        })
-}
+const login = (email, password) => notAuthenticatedApiClient.post('/apc/log-in', {email, password}).then(
+    (response) => {
+        saveCredentials(response);
+        return response;
+}).catch(
+    (error) => {
+        return error;
+});
 
-const getAllFavoriteProducts = (userId) => authenticatedApiClient().get('/apc/' + userId + '/favorite-products').then( 
+
+const getAllFavoriteProductsByUser = (userId) => authenticatedApiClient().get('/apc/admin/' + userId + '/favorite-products').then( 
     (response) => {
         return response;
 });
 
-const removeFavoriteProduct = (userId, productId) => authenticatedApiClient().put('/apc/' + userId + '/favorite-products/remove/' + productId).then(
+
+const getAllFavoriteProducts = () => authenticatedApiClient().get('/apc/favorite-products').then( 
     (response) => {
         return response;
 });
 
-const addFavoriteProduct = (userId, productId) => authenticatedApiClient().put('/apc/' + userId + '/favorite-products/add/' + productId).then(
+const removeFavoriteProduct = (productId) => authenticatedApiClient().put('/apc/favorite-products/remove/' + productId).then(
     (response) => {
         return response;
 });
 
-const isFavoriteProduct = (userId, productId) => authenticatedApiClient().get('/apc/' + userId + '/is-favorite-product/' + productId).then(
+const addFavoriteProduct = (productId) => authenticatedApiClient().put('/apc/favorite-products/add/' + productId).then(
+    (response) => {
+        return response;
+});
+
+const isFavoriteProduct = (productId) => authenticatedApiClient().get('/apc/is-favorite-product/' + productId).then(
     (response) => {
         return response;
 });
@@ -56,17 +71,17 @@ const isAdmin = (userId) => authenticatedApiClient().get('/apc/users/is-admin/'+
         return response;
 });
 
-const addAdminRoleToUser = (userToBeAdmin) => authenticatedApiClient().put('/apc/users/add-admin/' + userToBeAdmin).then(
+const addAdminRoleToUser = (userToBeAdmin) => authenticatedApiClient().put('/apc/admin/users/add-admin/' + userToBeAdmin).then(
     (response) => {
         return response;
 });
 
-const removeAdminRoleToUser = (userToRemoveAdmin) => authenticatedApiClient().put('/apc/users/remove-admin/' + userToRemoveAdmin).then(
+const removeAdminRoleToUser = (userToRemoveAdmin) => authenticatedApiClient().put('/apc/admin/users/remove-admin/' + userToRemoveAdmin).then(
     (response) => {
         return response;
 });
 
-const getUserByEmailOrUserName = (search) => authenticatedApiClient().get('/apc/users/search/' + search).then(
+const getUserByEmailOrUserName = (search) => authenticatedApiClient().get('/apc/admin/users/search/' + search).then(
     (response) => {
         return response;
 });
@@ -74,7 +89,8 @@ const getUserByEmailOrUserName = (search) => authenticatedApiClient().get('/apc/
 export default {isLoggedIn, 
                 register, 
                 login, 
-                getAllFavoriteProducts, 
+                getAllFavoriteProducts,
+                getAllFavoriteProductsByUser, 
                 removeFavoriteProduct, 
                 addFavoriteProduct, 
                 isFavoriteProduct,

@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid2';
 import SystemReportController from '../controller/SystemReportController';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useNavigate } from 'react-router-dom';
+import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch';
 
 const UsersWithMostPurchases = () => {
 
@@ -19,11 +20,14 @@ const UsersWithMostPurchases = () => {
 
     const [descriptionText, setDescriptionText] = useState(" compras realizadas");
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect( () => {
         SystemReportController.getUsersWithMostPurchases().then( response => {
             setRanking(response.data);
+            setIsLoading(false);
         }).catch(error => {
             console.log("Error al obtener los usuarios con mas compras: ", error);
         })
@@ -34,8 +38,8 @@ const UsersWithMostPurchases = () => {
                                                         margin: '1rem',
                                                         border:'2px solid #1976d2', 
                                                         borderRadius: '10px'}}>
-            <Grid size={8} display='flex' justifyContent='left' alignItems='center'>
-                <Box display='flex'>
+            <Grid size={8} display='flex' justifyContent='left'>
+                <Box display='flex' alignItems='center'>
                     <Typography color='primary' fontWeight='bold' margin='1rem'>Nombre de usuario: </Typography>                 
                     <Typography fontWeight='bold' alignContent='center'> {user.userName}</Typography>
                     <Typography color='primary' fontWeight='bold' margin='1rem'>Email:</Typography>
@@ -103,10 +107,13 @@ const UsersWithMostPurchases = () => {
                         onClick={orderByProducts}/> 
             </Box>
             <Box margin='1rem' sx={{placeItems: 'center'}}>
-                {ranking.length === 0 ?
-                    emptyResult
+                {isLoading?
+                    <LoadingScreenOptionsSearch />
                     :
-                    ranking.map(userInTop => userRow(userInTop))
+                    ranking.length === 0 ?
+                       emptyResult
+                       :
+                       ranking.map(userInTop => userRow(userInTop))
                 }
             </Box>
         </Box>
