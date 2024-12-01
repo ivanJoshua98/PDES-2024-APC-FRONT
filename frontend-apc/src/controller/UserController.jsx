@@ -10,6 +10,7 @@ const saveCredentials = (response) => {
         const authToken = response.headers.getAuthorization();
         sessionStorage.setItem('token', authToken.toString());
         sessionStorage.setItem('userId', response.data.id);
+        sessionStorage.setItem('userName', response.data.userName);
         isAdmin(response.data.id).then( response => {
             sessionStorage.setItem('isAdmin', response.data);
         }).catch(error => {
