@@ -34,7 +34,7 @@ const addNewProduct = (mercadoLibreId, amount, picture, link, title, categoryId,
 });
 
 
-const removeProduct = (productId) => authenticatedApiClient().put('/apc/shopping-cart/inprogress/remove-roduct/' + productId).then( (response) => {
+const removeProduct = (productId) => authenticatedApiClient().put('/apc/shopping-cart/inprogress/remove-product/' + productId).then( (response) => {
     return response;
 });
 
