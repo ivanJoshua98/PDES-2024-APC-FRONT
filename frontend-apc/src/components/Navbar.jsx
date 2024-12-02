@@ -34,6 +34,8 @@ function Navbar(props) {
 
   const userId = sessionStorage.getItem('userId');
 
+  const userName = sessionStorage.getItem('userName');
+
   const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect( () => {
@@ -170,8 +172,10 @@ function Navbar(props) {
 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+                <Avatar sx={{ bgcolor: '#ffa726', width: 46, height: 46 }}>
+                  {userName[0].toUpperCase()} 
+                </Avatar>
+                </IconButton>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
@@ -189,6 +193,7 @@ function Navbar(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+                <Typography sx={{ fontWeight:'bold', textAlign:'center', marginBottom:'1rem'}}>{userName}</Typography>
                 <MenuItem key="mi-perfil" onClick={handleCloseUserMenu}>
                   <Typography sx={{ textAlign: 'center' }}>Mi perfil</Typography>
                 </MenuItem>

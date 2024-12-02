@@ -5,7 +5,7 @@ import ShoppingCartController from '../controller/ShoppingCartController';
 import { useParams } from 'react-router-dom';
 import LinkIcon from '@mui/icons-material/Link';
 
-const ShoppingCartDetails = () => { 
+const ShoppingCartDetailsFromOtherUser = () => { 
 
     const [purchasedCart, setPurchasedCart] = useState({
         totalAmountPurchase: 0,
@@ -18,12 +18,12 @@ const ShoppingCartDetails = () => {
     let {cartId} = useParams();
 
     useEffect( () => {
-        ShoppingCartController.getShoppingCartByIdAndLoggedInUser(cartId).then( (response) => {
+        ShoppingCartController.getShoppingCartById(cartId).then( (response) => {
             setPurchasedCart(response.data);
         }).catch( (error) => {
             console.log("Error al obtener el carrito de compras: ", error);
         })
-    }, [setPurchasedCart]);
+    }, [cartId]);
 
     const productsAmount = () => {
         var result = 0;
@@ -96,4 +96,4 @@ const ShoppingCartDetails = () => {
     )
 }
 
-export default ShoppingCartDetails;
+export default ShoppingCartDetailsFromOtherUser;

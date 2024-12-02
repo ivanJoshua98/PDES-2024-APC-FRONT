@@ -20,7 +20,7 @@ const ShoppingCart = () => {
     const [hasShoppingCartInprogress, setHasShoppingCartInprogress] = useState(false);
   
     useEffect(() => {
-      ShoppingCartController.getShoppingCartInProgress(sessionStorage.getItem("userId")).then( response => {
+      ShoppingCartController.getShoppingCartInProgress().then( response => {
         switch (response.status) {
           case 404:
             setHasShoppingCartInprogress(false);
@@ -85,7 +85,7 @@ const style = {
 
 
   const deleteShoppingCart = () => {
-    ShoppingCartController.deleteShoppingCart(shoppingCart.id).then( response => {
+    ShoppingCartController.deleteShoppingCart().then( response => {
       handleCloseModalDeleteCart();
       setShoppingCart({
         totalAmountPurchase: 0,
@@ -169,7 +169,7 @@ const style = {
             <Typography marginRight='1rem' sx={{color:'white'}}>CARRITO DE COMPRAS</Typography>
           </Box>
           
-          {hasShoppingCartInprogress? 
+          {hasShoppingCartInprogress || shoppingCart.productsInCart.length > 0? 
             shoppingCart.productsInCart.map(
               (product) => <ProductInCart key={product.id} product={product} />
             )
@@ -177,7 +177,7 @@ const style = {
             <EmptyShoppingCart/> 
           }
 
-          {hasShoppingCartInprogress? 
+          {hasShoppingCartInprogress || shoppingCart.productsInCart.length > 0?
             <Box display='grid' justifyContent='right' marginRight='1rem'>
               <Typography fontWeight='bold'> Total en el carrito: ${Intl.NumberFormat().format(shoppingCart.totalAmountPurchase)}</Typography>
               <Button variant='text' sx={{justifyContent:'right'}} onClick={handleOpenModalDeleteCart}>Vaciar carrito</Button>
@@ -186,7 +186,7 @@ const style = {
             <></>
           }
 
-          {hasShoppingCartInprogress?
+          {hasShoppingCartInprogress || shoppingCart.productsInCart.length > 0?
             <Box display='flex' justifyContent='center' marginTop='1rem'>
               <Button variant='contained' onClick={handleOpenModalFinishPurchase}>Finalizar Compra</Button>
             </Box>

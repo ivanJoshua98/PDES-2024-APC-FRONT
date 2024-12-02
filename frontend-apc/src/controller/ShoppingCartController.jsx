@@ -65,6 +65,10 @@ const getShoppingCartById = (shoppingCartId) => authenticatedApiClient().get('/a
 });
 
 
+const getShoppingCartByIdAndLoggedInUser = (shoppingCartId) => authenticatedApiClient().get('/apc/shopping-cart/' + shoppingCartId).then(
+    (response) => {
+        return response;
+});
 
 const getAllPurchasesByUser = (userId) => authenticatedApiClient().get('apc/admin/shopping-cart/all-purchases/' + userId).then (
     (response) => {
@@ -73,7 +77,7 @@ const getAllPurchasesByUser = (userId) => authenticatedApiClient().get('apc/admi
 ) 
 
 
-const getAllPurchases = (userId) => authenticatedApiClient().get('apc/shopping-cart/all-purchases').then (
+const getAllPurchases = () => authenticatedApiClient().get('apc/shopping-cart/all-purchases').then (
     (response) => {
         return response;
     }
@@ -90,4 +94,5 @@ export default {deleteShoppingCart,
                 getShoppingCartById,
                 getShoppingCartInProgress,
                 getAllPurchasesByUser,
-                getAllPurchases};
+                getAllPurchases,
+                getShoppingCartByIdAndLoggedInUser};

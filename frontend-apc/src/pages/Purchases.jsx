@@ -8,14 +8,6 @@ import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch
 
 const Purchases = () => {
 
-    /*const [purchases, setPurchases] = useState([{
-        totalAmountPurchase: 0,
-        productsInCart: [],
-        buyerId: "",
-        id: "",
-        cartState: ""
-    }]); */
-
     const [purchases, setPurchases] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
