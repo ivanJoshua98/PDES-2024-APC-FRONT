@@ -123,7 +123,7 @@ const Login = () => {
             display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8}}>
           
           <Box display='flex'>
-            <Typography variant="h4" noWrap component="a" 
+            <Typography variant="h4" noWrap component="a" id='login-banner'
                       sx={{ mr: 2, fontWeight: 'bold', letterSpacing: '.3rem',
                             textDecoration: 'none', color: '#1976d2'}}>
               APC
@@ -139,9 +139,9 @@ const Login = () => {
                       onChange={(newEmailEvent) => changeEmailValue(newEmailEvent)}/>
 
           {passwordField({fieldId: "password", label: "Contraseña", password: password})}
-          {showDataError? <Alert severity="error" >{dataError}</Alert> : <></>}
+          {showDataError? <Alert severity="error" id='login-error'>{dataError}</Alert> : <></>}
 
-          <Button color='primary' type="submit" fullWidth variant="contained"
+          <Button color='primary' type="submit" fullWidth variant="contained" id="login-button"
                   sx={{ mt: 3, mb: 2, fontSize: 'x-large', fontWeight: 'bold' }}>
               Iniciar Sesion
           </Button>

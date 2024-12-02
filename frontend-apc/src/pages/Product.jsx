@@ -47,10 +47,10 @@ const Product = () => {
               </Grid>
               <Grid size={6} alignContent='center'>
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography gutterBottom variant="h5" component="div" id='searched-product-title'>
                     {product.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold', fontSize: 'x-large' }}>
+                  <Typography id='product-price' variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold', fontSize: 'x-large' }}>
                       ${Intl.NumberFormat().format(product.price)}
                   </Typography>
                 </CardContent>

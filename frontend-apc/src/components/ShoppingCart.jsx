@@ -166,7 +166,7 @@ const style = {
               <ChevronLeftIcon fontSize='large' sx={{color:'white'}} />
             </IconButton>
 
-            <Typography marginRight='1rem' sx={{color:'white'}}>CARRITO DE COMPRAS</Typography>
+            <Typography id='shopping-cart-banner' marginRight='1rem' sx={{color:'white'}}>CARRITO DE COMPRAS</Typography>
           </Box>
           
           {hasShoppingCartInprogress || shoppingCart.productsInCart.length > 0? 
@@ -209,7 +209,7 @@ const style = {
       return (
         
         <Box>
-            <IconButton aria-label="cart" onClick={toggleDrawer("right", true)} sx={{marginRight:'1rem'}}>
+            <IconButton id='open-shopping-cart' aria-label="cart" onClick={toggleDrawer("right", true)} sx={{marginRight:'1rem'}}>
                 <Badge badgeContent={amountProductsInCart()} color="error">
                     <AddShoppingCartIcon sx={{color:'white'}}/>
                 </Badge>
