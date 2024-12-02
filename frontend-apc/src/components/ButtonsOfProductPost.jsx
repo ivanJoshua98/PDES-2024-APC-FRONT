@@ -90,7 +90,7 @@ const ButtonsOfProductPost = (props) => {
     };
 
     const addToFavorites = () => {
-        UserController.addFavoriteProduct(userId, product.id).then( _ => {
+        UserController.addFavoriteProduct(product.id).then( _ => {
             setIsFavorite(true);   
         }).catch( error => {
             console.log("Error al agregar producto a favoritos: ", error);
@@ -98,7 +98,7 @@ const ButtonsOfProductPost = (props) => {
     };
 
     const removeToFavorites = () => {
-        UserController.removeFavoriteProduct(userId, product.id).then( _ => {
+        UserController.removeFavoriteProduct(product.id).then( _ => {
             setIsFavorite(false);
         }).catch( error => {
             console.log("Error al eliminar de favoritos: ", error);
