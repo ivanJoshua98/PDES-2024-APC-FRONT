@@ -25,7 +25,7 @@ const SearchedUser = (props) => {
         }). catch(error => {
             console.log("Error al verificar si es admin: ", error);
         });
-        UserController.getAllFavoriteProducts(user.id).then( response => {
+        UserController.getAllFavoriteProductsByUser(user.id).then( response => {
             setFavoriteProductsIds(response.data);
         }).catch(error => {
             console.log("Error al obtener los productos favoritos: ", error);

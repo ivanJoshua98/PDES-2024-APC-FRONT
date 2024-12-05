@@ -5,7 +5,7 @@ import { useState } from 'react';
 import UserController from '../controller/UserController';
 import ProductController from '../controller/ProductController';
 import EmptyFavoritesList from '../components/EmptyFavoritesList';
-import LoadingScreenProductSearch from '../components/LoadingScreenProductSearch';
+import LoadingScreenOptionsSearch from '../components/LoadingScreenOptionsSearch';
 import ProductList from '../components/ProductList';
 import { useParams } from 'react-router-dom';
 
@@ -33,16 +33,19 @@ const FavoriteProductsFromOtherUser = () => {
         groupBy20.forEach( ids => {
             ProductController.getAllProductsById(ids.join()).then( mlProducts => {
                 setFavoriteProducts(mlProducts.data);
+                setLoading(false);
             }).catch( error => {
                 console.log("Error al cargar los productos de ML: ", error);
             });
         });
-        setLoading(false);
     };
 
     useEffect( () => {
-        UserController.getAllFavoriteProducts(userId).then( response => {
+        UserController.getAllFavoriteProductsByUser(userId).then( response => {
             getAllFavoriteProductsFromML(response.data);
+            if(response.data.length === 0){
+                setLoading(false);
+            };
         }).catch( error => {
             console.log("Error al obtener los productos favoritos: ", error);
         })
@@ -57,10 +60,10 @@ const FavoriteProductsFromOtherUser = () => {
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {loading ? 
-                    <LoadingScreenProductSearch/> 
+                    <LoadingScreenOptionsSearch/> 
                     :
                     favoriteProducts.length === 0 ? 
-                        <EmptyFavoritesList textTitle={userName} textBody={"no tiene productos favoritos"} /> 
+                        <EmptyFavoritesList textTitle={userName} textBody="No tiene productos favoritos" /> 
                         :
                         <ProductList products={favoriteProducts}/>
                 }

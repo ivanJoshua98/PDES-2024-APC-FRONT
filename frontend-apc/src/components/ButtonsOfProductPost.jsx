@@ -21,7 +21,7 @@ const ButtonsOfProductPost = (props) => {
     const userId = sessionStorage.getItem('userId');
 
     useEffect( () => {
-        UserController.isFavoriteProduct(userId, product.id).then( response => {
+        UserController.isFavoriteProduct(product.id).then( response => {
             setIsFavorite(response.data);
         }).catch( error => {
             console.log("Error al verificar si es producto favorito: ", error);
@@ -59,14 +59,13 @@ const ButtonsOfProductPost = (props) => {
 
     const addProductOneTime = () => {
         if(productExistsInCart(product)){
-            ShoppingCartController.addProductOneTime(shoppingCart.id, getProductInCartFromMLId(product).id).then( response => {
+            ShoppingCartController.addProductOneTime(getProductInCartFromMLId(product).id).then( response => {
                 setShoppingCart(response.data);
             }).catch( (error) => {
                 console.log("Error al sumar la cantidad del producto: ", error);
             });
         } else {
-            ShoppingCartController.addNewProduct(   shoppingCart.id, 
-                                                    product.id,
+            ShoppingCartController.addNewProduct(   product.id,
                                                     1,
                                                     product.pictures[0],
                                                     product.link,
@@ -91,7 +90,7 @@ const ButtonsOfProductPost = (props) => {
     };
 
     const addToFavorites = () => {
-        UserController.addFavoriteProduct(userId, product.id).then( _ => {
+        UserController.addFavoriteProduct(product.id).then( _ => {
             setIsFavorite(true);   
         }).catch( error => {
             console.log("Error al agregar producto a favoritos: ", error);
@@ -99,7 +98,7 @@ const ButtonsOfProductPost = (props) => {
     };
 
     const removeToFavorites = () => {
-        UserController.removeFavoriteProduct(userId, product.id).then( _ => {
+        UserController.removeFavoriteProduct(product.id).then( _ => {
             setIsFavorite(false);
         }).catch( error => {
             console.log("Error al eliminar de favoritos: ", error);
@@ -115,21 +114,21 @@ const ButtonsOfProductPost = (props) => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Agregar al carrito">
-                <IconButton color="primary" aria-label="add to shopping cart" sx={{margin: '1rem'}}
+                <IconButton id='add-to-shpcar-button' color="primary" aria-label="add to shopping cart" sx={{margin: '1rem'}}
                             onClick={addToCart}>
                     <AddShoppingCartIcon fontSize='large'/>
                 </IconButton>
             </Tooltip>
             {isFavorite? 
-                <Tooltip title="Eliminar de Favoritos">
-                    <IconButton color="primary" aria-label="remove to favorites" sx={{margin: '1rem'}}
+                <Tooltip id='tool-tip-remove' title="Eliminar de Favoritos">
+                    <IconButton id='remove-to-favorites' color="primary" aria-label="remove to favorites" sx={{margin: '1rem'}}
                                 onClick={removeToFavorites}>
                         <FavoriteIcon fontSize='large'/>
                     </IconButton>
                 </Tooltip> 
                 :
-                <Tooltip title="Agregar a Favoritos">
-                    <IconButton color="primary" aria-label="add to favorites" sx={{margin: '1rem'}}
+                <Tooltip id='tool-tip-add' title="Agregar a Favoritos">
+                    <IconButton id='add-to-favorites' color="primary" aria-label="add to favorites" sx={{margin: '1rem'}}
                                 onClick={addToFavorites}>
                         <FavoriteBorderIcon fontSize='large'/>
                     </IconButton>

@@ -12,16 +12,15 @@ const ProductInCart = (props) => {
     const [shoppingCart, setShoppingCart] = useContext(Context);
 
     const removeJustOne = () => {
-        ShoppingCartController.subtractProductOneTime(shoppingCart.id, product.id).then( response => {
+        ShoppingCartController.subtractProductOneTime(product.id).then( response => {
             setShoppingCart(response.data);
-            console.log("Se resto en uno la cantidad del producto");
         }).catch( (error) => {
             console.log("Error al restar en uno la cantidad del producto: ", error);
         });
     };
 
     const removeAll = () => {
-        ShoppingCartController.removeProduct(shoppingCart.id, product.id).then( response => {
+        ShoppingCartController.removeProduct(product.id).then( response => {
             setShoppingCart(response.data);
         }).catch( (error) => {
             console.log("Error al quitar el producto del carrito: ", error);
@@ -29,7 +28,7 @@ const ProductInCart = (props) => {
     };
 
     const addJustOneToCart = () => {
-        ShoppingCartController.addProductOneTime(shoppingCart.id, product.id).then( response => {
+        ShoppingCartController.addProductOneTime(product.id).then( response => {
             setShoppingCart(response.data);
         }).catch( (error) => {
             console.log("Error al sumas en uno la cantidad del producto: ", error);

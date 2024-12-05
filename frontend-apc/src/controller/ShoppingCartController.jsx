@@ -1,7 +1,7 @@
 import { authenticatedApiClient } from "./BaseApi";
 
 
-const createShoppingCart = (productsInCart, buyerId) => authenticatedApiClient().post('/apc/shoppingCart/newShoppingCart', {
+const createShoppingCart = (productsInCart, buyerId) => authenticatedApiClient().post('/apc/shopping-cart/new-shopping-cart', {
     productsInCart,
     buyerId,
 }).then( (response) => {
@@ -9,18 +9,18 @@ const createShoppingCart = (productsInCart, buyerId) => authenticatedApiClient()
 });
 
 
-const finishPurchase = (shoppingCartId) => authenticatedApiClient().put('/apc/shoppingCart/' + shoppingCartId + '/finishPurchase').then(
+const finishPurchase = () => authenticatedApiClient().put('/apc/shopping-cart/inprogress/finish-purchase').then(
     (response) => {
         return response;
 });
 
 
-const addProductOneTime = (shoppingCartId, productId) => authenticatedApiClient().put('apc/shoppingCart/' + shoppingCartId + '/addProductOneTime/' + productId).then( (response) => {
+const addProductOneTime = (productId) => authenticatedApiClient().put('apc/shopping-cart/inprogress/add-product-one-time/' + productId).then( (response) => {
     return response;
 });
 
 
-const addNewProduct = (shoppingCartId, mercadoLibreId, amount, picture, link, title, categoryId, price, condition) => authenticatedApiClient().put('/apc/shoppingCart/' + shoppingCartId + '/addProduct', {
+const addNewProduct = (mercadoLibreId, amount, picture, link, title, categoryId, price, condition) => authenticatedApiClient().put('/apc/shopping-cart/inprogress/add-product', {
     mercadoLibreId, 
     amount,
     picture,
@@ -34,34 +34,50 @@ const addNewProduct = (shoppingCartId, mercadoLibreId, amount, picture, link, ti
 });
 
 
-const removeProduct = (shoppingCartId, productId) => authenticatedApiClient().put('/apc/shoppingCart/' + shoppingCartId + '/removeProduct/' + productId).then( (response) => {
+const removeProduct = (productId) => authenticatedApiClient().put('/apc/shopping-cart/inprogress/remove-product/' + productId).then( (response) => {
     return response;
 });
 
 
-const subtractProductOneTime = (shoppingCartId, productId) => authenticatedApiClient().put('/apc/shoppingCart/' + shoppingCartId + '/subtractProductOneTime/'+ productId).then( (response) => {
+const subtractProductOneTime = (productId) => authenticatedApiClient().put('/apc/shopping-cart/inprogress/subtract-product-one-time/'+ productId).then( (response) => {
     return response;
 });
 
 
-const deleteShoppingCart = (shoppingCartId) => authenticatedApiClient().delete('/apc/shoppingCart/' + shoppingCartId + '/deleteShoppingCart').then(
+const deleteShoppingCart = () => authenticatedApiClient().delete('/apc/shopping-cart/inprogress/delete-shopping-cart').then(
     (response) => { 
         return response 
 });
 
 
-const getShoppingCart = (shoppingCartId) => authenticatedApiClient().get('/apc/shoppingCart/' + shoppingCartId).then(
+const getShoppingCartInProgress = () => authenticatedApiClient().get('/apc/shopping-cart/inprogress').then(
+    (response) => {
+        return response;
+}).catch(
+    (error) => {
+        return error;
+});
+
+
+const getShoppingCartById = (shoppingCartId) => authenticatedApiClient().get('/apc/admin/shopping-cart/' + shoppingCartId).then(
     (response) => {
         return response;
 });
 
 
-const getShoppingCartInProgress = (userId) => authenticatedApiClient().get('apc/shoppingCart/inprogress/' + userId).then(
+const getShoppingCartByIdAndLoggedInUser = (shoppingCartId) => authenticatedApiClient().get('/apc/shopping-cart/' + shoppingCartId).then(
     (response) => {
         return response;
 });
 
-const getAllPurchasesByUser = (userId) => authenticatedApiClient().get('apc/shoppingCart/allPurchases/' + userId).then (
+const getAllPurchasesByUser = (userId) => authenticatedApiClient().get('apc/admin/shopping-cart/all-purchases/' + userId).then (
+    (response) => {
+        return response;
+    }
+) 
+
+
+const getAllPurchases = () => authenticatedApiClient().get('apc/shopping-cart/all-purchases').then (
     (response) => {
         return response;
     }
@@ -75,6 +91,8 @@ export default {deleteShoppingCart,
                 addNewProduct, 
                 createShoppingCart, 
                 finishPurchase,
-                getShoppingCart,
+                getShoppingCartById,
                 getShoppingCartInProgress,
-                getAllPurchasesByUser};
+                getAllPurchasesByUser,
+                getAllPurchases,
+                getShoppingCartByIdAndLoggedInUser};

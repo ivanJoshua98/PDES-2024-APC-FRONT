@@ -34,12 +34,13 @@ function Navbar(props) {
 
   const userId = sessionStorage.getItem('userId');
 
+  const userName = sessionStorage.getItem('userName');
+
   const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect( () => {
     UserController.isAdmin(userId).then( response => {
       setIsAdmin(response.data);
-      console.log("El usuario es admin: ", response.data);
     }).catch( error => {
       console.log("Error al verificar si el usuario es admin: ", error);
     });
@@ -146,7 +147,7 @@ function Navbar(props) {
             <Button key='Inicio'
                     onClick={() => navigateTo('/home')}
                     sx={{ margin: 1, color: 'white' }}> Inicio </Button>
-            <Button key='Favoritos'
+            <Button key='Favoritos' id='navigate-to-favorites'
                     onClick={() => navigateTo('/favorite-products')}
                     sx={{ margin: 1, marginRight: 2, color: 'white' }}> Favoritos </Button>
             <Button key='Compras'
@@ -171,8 +172,10 @@ function Navbar(props) {
 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+                <Avatar sx={{ bgcolor: '#ffa726', width: 46, height: 46 }}>
+                  {userName[0].toUpperCase()} 
+                </Avatar>
+                </IconButton>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
@@ -190,6 +193,7 @@ function Navbar(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+                <Typography sx={{ fontWeight:'bold', textAlign:'center', marginBottom:'1rem'}}>{userName}</Typography>
                 <MenuItem key="mi-perfil" onClick={handleCloseUserMenu}>
                   <Typography sx={{ textAlign: 'center' }}>Mi perfil</Typography>
                 </MenuItem>

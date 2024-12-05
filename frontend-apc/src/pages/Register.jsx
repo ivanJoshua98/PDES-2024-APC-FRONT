@@ -50,7 +50,6 @@ const Register = () => {
     if(samePassword(password, repeatPassword)) {
       UserController.register(email, password, userName)
       .then((res) => {
-        console.log('response:', res);
         navigate('/sign-in');
       })
       .catch((error) => handleErrors(error));
@@ -61,7 +60,6 @@ const Register = () => {
 
 
   const handleErrors = (error) => {
-    console.log('error:', error);
     if(error.code === "ERR_NETWORK") {
       setDisplayError(true)
     }

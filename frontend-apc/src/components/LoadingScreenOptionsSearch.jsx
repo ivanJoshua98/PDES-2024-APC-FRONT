@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2';
 import Skeleton from '@mui/material/Skeleton';
 
 
-const LoadingScreenProductSearch = () => {
+const LoadingScreenOptionsSearch = () => {
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} width='80%' marginTop='1rem'
           sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -16,4 +16,4 @@ const LoadingScreenProductSearch = () => {
   )
 }
 
-export default LoadingScreenProductSearch
+export default LoadingScreenOptionsSearch

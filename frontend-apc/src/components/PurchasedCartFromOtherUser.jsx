@@ -4,7 +4,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
 
-const PurchasedCart = (props) => {
+const PurchasedCartFromOtherUser = (props) => {
 
     const cart = props.cart;
 
@@ -19,7 +19,7 @@ const PurchasedCart = (props) => {
     }
 
     const navigateToCart = () => {
-        navigate('/all-purchases/shopping-cart/' + cart.id);
+        navigate('/admin-panel/manage-users/all-purchases/shopping-cart/' + cart.id);
     };
 
     return (
@@ -45,4 +45,4 @@ const PurchasedCart = (props) => {
     )
 }
 
-export default PurchasedCart;
+export default PurchasedCartFromOtherUser;
