@@ -147,7 +147,7 @@ function Navbar(props) {
             <Button key='Inicio'
                     onClick={() => navigateTo('/home')}
                     sx={{ margin: 1, color: 'white' }}> Inicio </Button>
-            <Button key='Favoritos'
+            <Button key='Favoritos' id='navigate-to-favorites'
                     onClick={() => navigateTo('/favorite-products')}
                     sx={{ margin: 1, marginRight: 2, color: 'white' }}> Favoritos </Button>
             <Button key='Compras'

@@ -25,14 +25,14 @@ const Searcher = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width:'70%' }} >
-            <TextField id="filled-basic"  
+            <TextField id="filled-basic-sercher"  
                        variant="outlined" 
                        placeholder='Busca productos marcas y mas...'
                        onChange={(event) => setKeyWords(event.target.value)}
                        slotProps={{
                         input: {
                           startAdornment: (
-                            <InputAdornment position="start">
+                            <InputAdornment position="start"  id='ejecute-search'>
                               <IconButton onClick={handleClick}>  
                                 <SearchIcon />
                               </IconButton>
