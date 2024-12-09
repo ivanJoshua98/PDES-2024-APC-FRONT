@@ -1,7 +1,6 @@
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import SystemReportController from '../controller/SystemReportController';
-import ProductController from '../controller/ProductController';
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import LinkIcon from '@mui/icons-material/Link';
@@ -12,35 +11,18 @@ const MostPurchasedProducts = () => {
 
     const [purchasedProducts, setPurchasedProducts] = useState([]);
 
-    const [timesPurchased, setTimesPurchased] = useState([]);
-
-    const getPurchasedProductsFromML = (idList) => {
-        ProductController.getAllProductsById(idList.join()).then( response => {
-            setPurchasedProducts(response.data);
-        }).catch( error => {
-            console.log("Error al cargar los productos de ML: ", error);
-        });
-    };
 
     useEffect( () => {
         SystemReportController.getTopFivePurchasedProducts().then( response => {
-            var idList = response.data.map(element => element.productId);
-            setTimesPurchased(response.data);
-            getPurchasedProductsFromML(idList);
+            setPurchasedProducts(response.data);
         }).catch( error => {
             console.log("Error al obtener los productos comprados: ", error);
         })
     }, []);
 
-    const getTimesPurchased = (product) => {
-        var id = product.id;
-        var found = timesPurchased.find(element => element.productId === id);
-        return found.timesPurchased;
-    }
-
-    const listElement = (product, timesPurchased) => (
-        <Box display='flex' alignItems='center' padding='1rem' key={product.id} sx={{borderBottom: 'outset'}}>
-            <img srcSet={product.pictures[0]}
+    const listElement = (product) => (
+        <Box display='flex' alignItems='center' padding='1rem' key={product.productId} sx={{borderBottom: 'outset'}}>
+            <img srcSet={product.picture}
                          src={product.picture}  
                          alt='product image'
                          loading="lazy" 
@@ -54,7 +36,7 @@ const MostPurchasedProducts = () => {
                 <Grid size={4} justifyItems='right'>
                     <Tooltip title="Ver detalles">
                         <IconButton color="primary" aria-label="go to mercado libre post"  sx={{float: 'inline-end'}}
-                            onClick={() => navigate('/search-result/product/' + product.id)}>
+                            onClick={() => navigate('/search-result/product/' + product.productId)}>
                             <LinkIcon/>
                         </IconButton>
                     </Tooltip>
@@ -64,11 +46,10 @@ const MostPurchasedProducts = () => {
                                                                      borderRadius: '10px',
                                                                      marginRight:'10px',
                                                                      width: 'fit-content'}}>
-                         {timesPurchased > 1 ?  timesPurchased + ' veces comprado' : timesPurchased + ' vez comprado'} 
+                         {product.timesPurchased > 1 ?  product.timesPurchased + ' veces comprado' : product.timesPurchased + ' vez comprado'} 
                     </Typography>
                 </Grid>
                 <Grid size={4} justifyItems='right'>
-                    <Typography>Precio x unidad ${Intl.NumberFormat().format(product.price)} </Typography>
                 </Grid>
             </Grid>
         </Box>
@@ -83,8 +64,8 @@ const MostPurchasedProducts = () => {
             </Box>
             <Box sx={{display: 'grid', justifyContent: 'center', alignItems: 'center', marginBottom:'2rem'}}>
                 {
-                    purchasedProducts.reverse().map(product => (
-                        listElement(product, getTimesPurchased(product))    
+                    purchasedProducts.map(product => (
+                        listElement(product)    
                     ))
                 }
             </Box>
