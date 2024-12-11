@@ -1,7 +1,6 @@
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import SystemReportController from '../controller/SystemReportController';
-import ProductController from '../controller/ProductController';
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import LinkIcon from '@mui/icons-material/Link';
@@ -13,35 +12,17 @@ const TopFiveFavoriteProducts = () => {
 
     const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-    const [timesChosenFavorite, setTimesChosenFavorite] = useState([]);
-
-    const getAllFavoriteProductsFromML = (idList) => {
-        ProductController.getAllProductsById(idList.join()).then( response => {
-            setFavoriteProducts(response.data);
-        }).catch( error => {
-            console.log("Error al cargar los productos de ML: ", error);
-        });
-    };
-
     useEffect( () => {
         SystemReportController.getTopFiveFavoriteProducts().then( response => {
-            var idList = response.data.map(element => element.productId);
-            setTimesChosenFavorite(response.data);
-            getAllFavoriteProductsFromML(idList);
+            setFavoriteProducts(response.data);
         }).catch( error => {
             console.log("Error al obtener los productos favoritos: ", error);
         })
     }, []);
 
-    const getTimesChosenFavorite = (product) => {
-        var id = product.id;
-        var found = timesChosenFavorite.find(element => element.productId === id);
-        return found.timesChosenFavorite;
-    }
-
-    const listElement = (product, timesChosen) => (
-        <Box display='flex' alignItems='center' padding='1rem' key={product.id} sx={{borderBottom: 'outset'}}>
-            <img srcSet={product.pictures[0]}
+    const listElement = (product) => (
+        <Box display='flex' alignItems='center' padding='1rem' key={product.productId} sx={{borderBottom: 'outset'}}>
+            <img srcSet={product.picture}
                          src={product.picture}  
                          alt='product image'
                          loading="lazy" 
@@ -55,7 +36,7 @@ const TopFiveFavoriteProducts = () => {
                 <Grid size={4} justifyItems='right'>
                     <Tooltip title="Ver detalles">
                         <IconButton color="primary" aria-label="go to mercado libre post"  sx={{float: 'inline-end'}}
-                            onClick={() => navigate('/search-result/product/' + product.id)}>
+                            onClick={() => navigate('/search-result/product/' + product.productId)}>
                             <LinkIcon/>
                         </IconButton>
                     </Tooltip>
@@ -65,11 +46,10 @@ const TopFiveFavoriteProducts = () => {
                                                                      borderRadius: '10px',
                                                                      marginRight:'10px',
                                                                      width: 'fit-content'}}>
-                         {timesChosen > 1 ?  timesChosen + ' veces marcado como favorito' : timesChosen + ' vez marcado como favorito'} 
+                         {product.timesChosenFavorite > 1 ?  product.timesChosenFavorite + ' veces marcado como favorito' : product.timesChosenFavorite + ' vez marcado como favorito'} 
                     </Typography>
                 </Grid>
                 <Grid size={4} justifyItems='right'>
-                    <Typography>Precio x unidad ${Intl.NumberFormat().format(product.price)} </Typography>
                 </Grid>
             </Grid>
         </Box>
@@ -83,10 +63,10 @@ const TopFiveFavoriteProducts = () => {
                                     fontWeight:'bold'}}>Top 5 - Productos Favoritos</Typography>
             </Box>
             <Box sx={{marginBottom:'2rem', width:'90%'}}>
-                {
-                    favoriteProducts.reverse().map(product => (
-                        listElement(product, getTimesChosenFavorite(product))    
-                    ))
+                {favoriteProducts.length === 0 ? 
+                    <LoadingScreenOptionsSearch />
+                    :
+                    favoriteProducts.map(product => listElement(product))
                 }
             </Box>
         </Box>
