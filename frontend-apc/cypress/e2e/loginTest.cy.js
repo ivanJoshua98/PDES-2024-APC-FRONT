@@ -1,6 +1,6 @@
 describe('The Log in Page', () => {
     it("succesfully loads", () => {
-      cy.visit("http://localhost:3000/sign-in");
+      cy.visit("http://localhost:5000/sign-in");
     });
 
 
