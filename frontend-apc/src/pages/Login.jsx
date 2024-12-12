@@ -125,10 +125,10 @@ const Login = () => {
           <Box display='flex'>
             <Typography variant="h4" noWrap component="a" id='login-banner'
                       sx={{ mr: 2, fontWeight: 'bold', letterSpacing: '.3rem',
-                            textDecoration: 'none', color: '#1976d2'}}>
+                            textDecoration: 'none', color: '#ffa726'}}>
               APC
             </Typography>
-            <ShoppingCartIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: '#1976d2', fontSize: 40 }} />
+            <ShoppingCartIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: '#ffa726', fontSize: 40 }} />
           </Box>
 
           <TextField  id="outlined-user-email-input"
